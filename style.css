@@ -333,9 +333,43 @@ ul { list-style: none; }
 }
 
 .hero-desc {
-  color: var(--txt2); max-width: 520px; font-size: .97rem; line-height: 1.8;
+  color: var(--txt2); max-width: 560px; font-size: .97rem; line-height: 1.85;
   margin-bottom: 2rem;
 }
+.hd-em {
+  color: var(--txt); font-style: normal; font-weight: 600;
+}
+.hd-hi {
+  color: var(--teal-light); font-style: normal; font-weight: 600;
+  background: var(--teal-dim); border-radius: 4px;
+  padding: 1px 5px;
+}
+
+/* ─── INTERACTIVE SECTION TEASERS ─── */
+.hero-teasers {
+  display: flex; flex-wrap: wrap; align-items: center;
+  gap: .6rem; margin-top: 1.75rem; padding-top: 1.5rem;
+  border-top: 1px solid var(--border);
+}
+.ht-label {
+  font-size: .68rem; font-weight: 600; letter-spacing: .08em;
+  text-transform: uppercase; color: var(--txt3);
+  white-space: nowrap; margin-right: .25rem;
+}
+.ht-chip {
+  display: inline-flex; align-items: center; gap: .5rem;
+  background: var(--bg2); border: 1px solid var(--border2);
+  border-radius: 10px; padding: .45rem .85rem;
+  text-decoration: none; transition: all .2s; cursor: pointer;
+}
+.ht-chip:hover {
+  border-color: var(--teal-border); background: var(--teal-dim);
+  transform: translateY(-2px); box-shadow: 0 4px 14px rgba(13,148,136,.15);
+}
+.ht-icon { font-size: 1rem; line-height: 1; flex-shrink: 0; }
+.ht-text { display: flex; flex-direction: column; gap: 1px; }
+.ht-title { font-size: .8rem; font-weight: 600; color: var(--txt); line-height: 1; }
+.ht-sub   { font-size: .66rem; color: var(--txt3); line-height: 1; }
 
 .hero-btns {
   display: flex; flex-wrap: wrap; gap: .85rem; margin-bottom: 2.5rem;
@@ -1198,6 +1232,9 @@ kbd {
   .pf-arrow { transform: rotate(90deg); width: 60px; }
   .hm-sep { width: 32px; height: 1px; }
   .hero-metrics { gap: 1.5rem; }
+  .ht-label { display: none; }
+  .ht-chip { padding: .4rem .7rem; }
+  .ht-sub  { display: none; }
 }
 
 @media (max-width: 480px) {
