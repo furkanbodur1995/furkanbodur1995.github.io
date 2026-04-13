@@ -625,23 +625,66 @@
       <!-- TEAMS ↔ N8N DEMO -->
       <div class="fb-demo" data-reveal>
 
-        <!-- TRIGGER PANE -->
+        <!-- TRIGGER PANE — Teams UI mockup -->
         <div class="fb-trigger-pane" id="projTrigger">
-          <div class="fbt-channel">
-            <span class="fbt-ms-icon">⊞</span>
-            <span class="fbt-channel-text">Microsoft Teams · #automation-team</span>
-          </div>
-          <div class="fbt-compose">
-            <div class="fbt-avatar">AK</div>
-            <div class="fbt-bubble">
-              <span class="fbt-mention">@FINALBOSS</span> run tests for new login flow (STORY-5678)
+
+          <!-- Teams sidebar -->
+          <div class="tms-sidebar">
+            <div class="tms-sb-logo">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="#fff"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14H9V8h2v8zm4 0h-2V8h2v8z"/></svg>
+            </div>
+            <div class="tms-sb-item tms-sb-active" title="#automation-team">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+            </div>
+            <div class="tms-sb-item" title="Teams">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+            </div>
+            <div class="tms-sb-item" title="Calendar">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
             </div>
           </div>
-          <button class="fb-send-btn" id="projRunBtn">
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
-            Send message in Teams to trigger
-            <span class="fb-send-hint">← click</span>
-          </button>
+
+          <!-- Teams main panel -->
+          <div class="tms-main">
+
+            <!-- Channel header -->
+            <div class="tms-header">
+              <span class="tms-hash">#</span>
+              <span class="tms-channel-name">automation-team</span>
+              <span class="tms-header-sep">|</span>
+              <span class="tms-header-sub">General · 4 members</span>
+            </div>
+
+            <!-- Message thread -->
+            <div class="tms-thread">
+              <div class="tms-msg">
+                <div class="tms-msg-avatar">SR</div>
+                <div class="tms-msg-body">
+                  <div class="tms-msg-meta"><span class="tms-msg-name">Sarah R.</span><span class="tms-msg-time">09:41</span></div>
+                  <div class="tms-msg-text">Deployed the new login flow to staging. Can someone run the test suite? 🙏</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Compose box -->
+            <div class="tms-compose">
+              <div class="tms-compose-top">
+                <span class="tms-compose-placeholder"><span class="tms-at">@FINALBOSS</span> run tests for new login flow (STORY-5678)</span>
+              </div>
+              <div class="tms-compose-toolbar">
+                <span class="tms-toolbar-icons">
+                  <span class="tms-ti">A</span>
+                  <span class="tms-ti">😊</span>
+                  <span class="tms-ti">📎</span>
+                </span>
+                <button class="tms-send-btn" id="projRunBtn">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2" fill="currentColor" stroke="none"/></svg>
+                  Send
+                </button>
+              </div>
+            </div>
+
+          </div>
         </div>
 
         <!-- WORKFLOW PANE -->

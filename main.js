@@ -680,12 +680,16 @@ if (tlLine && tlSection) {
     againBtn.style.display = 'none';
     workflowEl.classList.remove('visible');
     triggerEl.classList.remove('sent');
+    const compose = triggerEl.querySelector('.tms-compose');
+    if (compose) compose.classList.remove('fired');
     runBtn.disabled = false;
   }
 
   function runDemo() {
     runBtn.disabled = true;
     triggerEl.classList.add('sent');
+    const compose = triggerEl.querySelector('.tms-compose');
+    if (compose) compose.classList.add('fired');
     setTimeout(() => workflowEl.classList.add('visible'), 400);
 
     const steps = Array.from(stepsEl.querySelectorAll('.fbw-step'));

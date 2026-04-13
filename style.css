@@ -1012,55 +1012,118 @@ kbd {
   border-radius: 14px; overflow: hidden; margin-top: 2rem;
 }
 .fb-trigger-pane {
-  padding: 1.4rem 1.6rem;
-  transition: opacity .4s;
+  display: flex; transition: opacity .4s;
+  border-bottom: 1px solid var(--border);
 }
-.fb-trigger-pane.sent { opacity: .4; pointer-events: none; }
-.fb-trigger-pane.sent .fbt-bubble::after {
-  content: ' ✓ sent'; color: var(--teal-light); font-size: .7rem; font-weight: 600;
+.fb-trigger-pane.sent { opacity: .35; pointer-events: none; }
+
+/* Teams sidebar */
+.tms-sidebar {
+  width: 52px; flex-shrink: 0;
+  background: #33344a;
+  display: flex; flex-direction: column; align-items: center;
+  padding: .75rem 0; gap: .5rem;
 }
-.fbt-channel {
-  display: flex; align-items: center; gap: .5rem;
-  font-size: .72rem; color: var(--txt3); margin-bottom: 1rem;
+.tms-sb-logo {
+  width: 32px; height: 32px; border-radius: 8px;
+  background: #6264a7; display: flex; align-items: center; justify-content: center;
+  margin-bottom: .4rem;
 }
-.fbt-ms-icon { font-size: 1rem; }
-.fbt-compose {
-  display: flex; gap: .75rem; align-items: flex-start;
-  background: rgba(255,255,255,.04); border: 1px solid var(--border);
-  border-radius: 8px; padding: .75rem 1rem; margin-bottom: 1.1rem;
+.tms-sb-item {
+  width: 36px; height: 36px; border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  color: rgba(255,255,255,.5); cursor: pointer; transition: background .15s;
 }
-.fbt-avatar {
-  width: 30px; height: 30px; border-radius: 50%; flex-shrink: 0;
-  background: rgba(98,100,167,.4); color: #c7c9f5;
-  font-size: .66rem; font-weight: 700;
+.tms-sb-item:hover { background: rgba(255,255,255,.08); color: rgba(255,255,255,.85); }
+.tms-sb-active { background: rgba(255,255,255,.12); color: #fff !important; }
+
+/* Teams main */
+.tms-main {
+  flex: 1; display: flex; flex-direction: column;
+  background: var(--bg2); min-width: 0;
+}
+
+/* Channel header */
+.tms-header {
+  display: flex; align-items: center; gap: .45rem;
+  padding: .7rem 1.2rem; border-bottom: 1px solid var(--border);
+  background: var(--bg2); flex-shrink: 0;
+}
+.tms-hash {
+  font-size: 1rem; font-weight: 700; color: #6264a7; line-height: 1;
+}
+.tms-channel-name {
+  font-size: .88rem; font-weight: 700; color: var(--txt);
+}
+.tms-header-sep { color: var(--border2); font-size: .9rem; }
+.tms-header-sub { font-size: .72rem; color: var(--txt3); }
+
+/* Thread */
+.tms-thread {
+  flex: 1; padding: 1rem 1.2rem .75rem; overflow: hidden;
+}
+.tms-msg {
+  display: flex; gap: .65rem; align-items: flex-start;
+}
+.tms-msg-avatar {
+  width: 32px; height: 32px; border-radius: 50%; flex-shrink: 0;
+  background: #e87c3e; color: #fff;
+  font-size: .65rem; font-weight: 700;
   display: flex; align-items: center; justify-content: center;
 }
-.fbt-bubble {
-  font-size: .86rem; color: var(--txt1); line-height: 1.5; padding-top: 3px;
+.tms-msg-meta { display: flex; align-items: baseline; gap: .5rem; margin-bottom: .2rem; }
+.tms-msg-name { font-size: .82rem; font-weight: 700; color: var(--txt); }
+.tms-msg-time { font-size: .68rem; color: var(--txt3); }
+.tms-msg-text { font-size: .84rem; color: var(--txt2); line-height: 1.5; }
+
+/* Compose box */
+.tms-compose {
+  border: 1.5px solid #6264a7; border-radius: 8px; margin: 0 1.2rem 1rem;
+  background: var(--bg3); overflow: hidden;
+  box-shadow: 0 0 0 3px rgba(98,100,167,.18);
+  animation: composePulse 2.4s ease infinite;
 }
-.fbt-mention { color: #818cf8; font-weight: 600; }
-.fb-send-btn {
-  display: inline-flex; align-items: center; gap: .5rem;
+@keyframes composePulse {
+  0%,100% { box-shadow: 0 0 0 3px rgba(98,100,167,.18); }
+  50%      { box-shadow: 0 0 0 5px rgba(98,100,167,.32); }
+}
+.tms-compose.fired { animation: none; border-color: var(--border); box-shadow: none; }
+.tms-compose-top {
+  padding: .6rem .9rem .4rem;
+}
+.tms-compose-placeholder {
+  font-size: .87rem; color: var(--txt2); line-height: 1.5;
+}
+.tms-at { color: #818cf8; font-weight: 600; }
+.tms-compose-toolbar {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: .35rem .6rem .4rem;
+  border-top: 1px solid var(--border);
+}
+.tms-toolbar-icons { display: flex; gap: .4rem; }
+.tms-ti {
+  width: 26px; height: 26px; border-radius: 5px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: .78rem; color: var(--txt3); cursor: pointer;
+  transition: background .15s;
+}
+.tms-ti:hover { background: rgba(255,255,255,.08); color: var(--txt2); }
+
+/* Send button */
+.tms-send-btn {
+  display: inline-flex; align-items: center; gap: .4rem;
   background: #6264a7; color: #fff;
-  border: none; border-radius: 7px; padding: .55rem 1.2rem;
-  font-size: .84rem; font-weight: 600; cursor: pointer;
-  transition: background .2s, transform .15s;
-  box-shadow: 0 0 0 0 rgba(98,100,167,.5);
-  animation: sendPulse 2.2s ease infinite;
+  border: none; border-radius: 6px; padding: .38rem .9rem;
+  font-size: .83rem; font-weight: 700; cursor: pointer;
+  transition: background .15s, transform .1s;
 }
-@keyframes sendPulse {
-  0%   { box-shadow: 0 0 0 0 rgba(98,100,167,.55); }
-  60%  { box-shadow: 0 0 0 8px rgba(98,100,167,0); }
-  100% { box-shadow: 0 0 0 0 rgba(98,100,167,0); }
-}
-.fb-send-hint {
-  font-size: .72rem; font-weight: 400; opacity: .75;
-  font-family: 'JetBrains Mono', monospace;
-  animation: hintBlink 1.4s step-end infinite;
-}
-@keyframes hintBlink { 0%,100%{opacity:.75} 50%{opacity:.2} }
-.fb-send-btn:hover { background: #4f52a0; transform: translateY(-1px); animation: none; }
-.fb-send-btn:disabled { opacity: .5; cursor: not-allowed; transform: none; animation: none; }
+.tms-send-btn:hover { background: #4f52a0; transform: scale(1.04); }
+.tms-send-btn:active { transform: scale(.97); }
+
+/* keep old classes for layout compat */
+.fbt-mention { color: #818cf8; font-weight: 600; }
+.fb-send-btn { display: none; }
+.fb-send-hint { display: none; }
 
 .fb-workflow-pane {
   border-top: 1px solid var(--border);
@@ -1248,6 +1311,9 @@ kbd {
   .ht-label { display: none; }
   .ht-chip { padding: .4rem .7rem; }
   .ht-sub  { display: none; }
+  .tms-sidebar { width: 40px; }
+  .tms-sb-item { width: 28px; height: 28px; }
+  .tms-header-sep, .tms-header-sub { display: none; }
 }
 
 @media (max-width: 480px) {
