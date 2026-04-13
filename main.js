@@ -1290,8 +1290,17 @@ Best,
   /* ── state ── */
   let bugs     = [];
   let caught   = 0;
-  let charX    = window.innerWidth / 2;
-  let charY    = window.innerHeight / 2;
+  // Start from the sidebar profile photo position
+  const sbAvatar = document.querySelector('.sb-avatar-img');
+  let charX, charY;
+  if (sbAvatar) {
+    const r = sbAvatar.getBoundingClientRect();
+    charX = r.left + r.width / 2;
+    charY = r.top + r.height / 2;
+  } else {
+    charX = 120;
+    charY = 120;
+  }
   let targetBug = null;
   let idle     = true;
   let idleAngle = 0;
