@@ -944,12 +944,15 @@ if (tlLine && tlSection) {
 (function initTestRunPanel() {
   const panel    = document.getElementById('testRunPanel');
   const passedEl = document.getElementById('trPassed');
+  const footer   = document.getElementById('trFooter');
   if (!panel) return;
 
   const ORDER      = ['about','experience','careermap','pipeline','project','skills'];
-  const PASS_DELAY = 520;
-  let passed = 0;
+  const TOTAL      = ORDER.length;
+  const PASS_DELAY = 480;
+  let passed   = 0;
   let observing = false;
+  let settled   = false; // ignores the initial synchronous observer fire
 
   function getItem(id) {
     return panel.querySelector(`.tr-item[data-tr-section="${id}"]`);
@@ -960,6 +963,7 @@ if (tlLine && tlSection) {
   }
 
   const sectionObs = new IntersectionObserver(entries => {
+    if (!settled) return; // ignore initial fire for already-visible elements
     entries.forEach(entry => {
       const item = getItem(entry.target.id);
       if (!item) return;
@@ -970,6 +974,9 @@ if (tlLine && tlSection) {
           setStatus(item, 'pass');
           passed++;
           passedEl.textContent = passed;
+          if (passed === TOTAL && footer) {
+            footer.innerHTML = '<span class="tr-footer-hire">✅ ALL PASSED · HIRE!!</span>';
+          }
         }, PASS_DELAY);
       }
     });
@@ -982,13 +989,12 @@ if (tlLine && tlSection) {
       const el = document.getElementById(id);
       if (el) sectionObs.observe(el);
     });
+    // Let the observer's initial synchronous calls fire+ignore, then open the gate
+    requestAnimationFrame(() => setTimeout(() => { settled = true; }, 80));
   }
 
-  // Show panel + start observing only after first scroll
   window.addEventListener('scroll', () => {
-    if (!panel.classList.contains('visible')) {
-      panel.classList.add('visible');
-    }
+    if (!panel.classList.contains('visible')) panel.classList.add('visible');
     startObserving();
   }, { passive: true });
 })();
