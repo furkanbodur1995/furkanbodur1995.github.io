@@ -904,6 +904,7 @@ if (tlLine && tlSection) {
     line.setAttribute('x1', CX); line.setAttribute('y1', CY);
     line.setAttribute('x2', p.x); line.setAttribute('y2', p.y);
     line.classList.add('radar-axis');
+    line.setAttribute('data-radar-axis', i);
     axesEl.appendChild(line);
   });
 
@@ -913,6 +914,8 @@ if (tlLine && tlSection) {
     const txt = document.createElementNS('http://www.w3.org/2000/svg', 'text');
     txt.setAttribute('x', p.x); txt.setAttribute('y', p.y + 4);
     txt.classList.add('radar-lbl');
+    txt.setAttribute('data-radar-axis', i);
+    txt.style.cursor = 'pointer';
     txt.textContent = ax.label;
     labelsEl.appendChild(txt);
   });
@@ -1089,4 +1092,133 @@ if (tlLine && tlSection) {
       setTimeout(() => t.remove(), 400);
     }, 3500);
   }
+})();
+
+
+/* ────────────────────────────────────────
+   25. TIME-TO-HIRE COUNTER
+──────────────────────────────────────── */
+(function initTimeToHire() {
+  const timeEl = document.getElementById('trTime');
+  if (!timeEl) return;
+
+  const start = Date.now();
+  let shown = false;
+
+  function fmt(ms) {
+    const s = Math.floor(ms / 1000);
+    const m = Math.floor(s / 60);
+    return m > 0 ? `${m}m ${s % 60}s` : `${s}s`;
+  }
+
+  function label(s) {
+    if (s < 30)  return '👀 just arrived';
+    if (s < 90)  return '🤔 reading carefully';
+    if (s < 180) return '😮 seems interested';
+    if (s < 360) return '🎯 seriously considering';
+    return '🔥 this is it — send offer';
+  }
+
+  setInterval(() => {
+    const elapsed = Date.now() - start;
+    const s = Math.floor(elapsed / 1000);
+    if (s < 10) return; // don't show immediately
+    if (!shown) {
+      shown = true;
+      timeEl.style.display = 'block';
+    }
+    timeEl.innerHTML = `⏱ ${fmt(elapsed)} — ${label(s)}`;
+  }, 1000);
+})();
+
+
+/* ────────────────────────────────────────
+   26. RADAR CHART INTERACTIVE HOVER
+──────────────────────────────────────── */
+(function initRadarHover() {
+  const svg = document.getElementById('radarSvg');
+  if (!svg) return;
+
+  const SKILLS = [
+    { label: 'AI & LLM',    val: 95, tags: ['MCP','RAG','pgvector','LLM APIs'] },
+    { label: 'Automation',  val: 92, tags: ['Playwright','Selenium','pytest','BDD'] },
+    { label: 'CI/CD',       val: 80, tags: ['Jenkins','GitLab','Docker','SQL'] },
+    { label: 'QA Strategy', val: 88, tags: ['ISTQB×3','Risk-based','Exploratory'] },
+    { label: 'API Testing', val: 85, tags: ['Postman','SoapUI','Security','RBAC'] },
+    { label: 'Leadership',  val: 78, tags: ['Mentoring','Process design','Docs'] },
+  ];
+
+  // tooltip element
+  const tip = document.createElement('div');
+  tip.style.cssText = `
+    position:fixed;background:var(--bg2);border:1px solid var(--teal-border);
+    border-radius:8px;padding:.5rem .75rem;font-size:.72rem;color:var(--txt);
+    pointer-events:none;opacity:0;transition:opacity .15s;z-index:500;
+    font-family:'JetBrains Mono',monospace;white-space:nowrap;
+    box-shadow:0 8px 24px rgba(0,0,0,.35);
+  `;
+  document.body.appendChild(tip);
+
+  function showTip(e, skill) {
+    tip.innerHTML = `<strong style="color:var(--teal-light)">${skill.label}</strong> · ${skill.val}/100<br>
+      <span style="color:var(--txt3)">${skill.tags.join(' · ')}</span>`;
+    tip.style.opacity = '1';
+    moveTip(e);
+  }
+  function moveTip(e) {
+    tip.style.left = (e.clientX + 14) + 'px';
+    tip.style.top  = (e.clientY - 10) + 'px';
+  }
+  function hideTip() { tip.style.opacity = '0'; }
+
+  // Observe for when radar axes are drawn (JS draws them), then attach hover
+  const mo = new MutationObserver(() => {
+    const axes = svg.querySelectorAll('[data-radar-axis]');
+    if (!axes.length) return;
+    axes.forEach((ax, i) => {
+      const skill = SKILLS[i];
+      if (!skill) return;
+      ax.style.cursor = 'pointer';
+      ax.addEventListener('mouseenter', e => showTip(e, skill));
+      ax.addEventListener('mousemove',  e => moveTip(e));
+      ax.addEventListener('mouseleave', hideTip);
+    });
+    mo.disconnect();
+  });
+  mo.observe(svg, { childList: true, subtree: true });
+})();
+
+
+/* ────────────────────────────────────────
+   27. MOBILE SWIPE SECTION NAV
+──────────────────────────────────────── */
+(function initSwipeNav() {
+  if (!window.matchMedia('(hover: none), (pointer: coarse)').matches) return; // touch only
+
+  const SECTIONS = ['about','experience','careermap','pipeline','project','skills'];
+  let startY = 0, startX = 0;
+
+  document.addEventListener('touchstart', e => {
+    startY = e.touches[0].clientY;
+    startX = e.touches[0].clientX;
+  }, { passive: true });
+
+  document.addEventListener('touchend', e => {
+    const dy = startY - e.changedTouches[0].clientY;
+    const dx = Math.abs(startX - e.changedTouches[0].clientX);
+    if (Math.abs(dy) < 60 || dx > 40) return; // not a vertical swipe
+
+    let curIdx = 0;
+    for (let i = 0; i < SECTIONS.length; i++) {
+      const el = document.getElementById(SECTIONS[i]);
+      if (el && el.getBoundingClientRect().top <= window.innerHeight * 0.45) curIdx = i;
+    }
+
+    const next = dy > 0
+      ? Math.min(curIdx + 1, SECTIONS.length - 1)
+      : Math.max(curIdx - 1, 0);
+
+    const target = document.getElementById(SECTIONS[next]);
+    if (target) target.scrollIntoView({ behavior: 'smooth' });
+  }, { passive: true });
 })();

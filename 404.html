@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>404 · Test Case Not Found — Furkan Bodur</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><defs><linearGradient id='g' x1='0' y1='0' x2='1' y2='1'><stop offset='0' stop-color='%2314b8a6'/><stop offset='1' stop-color='%230d9488'/></linearGradient></defs><rect width='100' height='100' rx='22' fill='url(%23g)'/><text x='50' y='67' font-size='46' font-family='system-ui,sans-serif' font-weight='900' fill='white' text-anchor='middle' letter-spacing='-2'>FB</text></svg>" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg:   #0b1120; --bg2: #0f172a; --bg3: #1e293b;
+      --teal: #0d9488; --teal-light: #14b8a6;
+      --txt:  #e2e8f0; --txt2: #94a3b8; --txt3: #475569;
+      --border: rgba(20,184,166,.18);
+      font-family: 'Inter', sans-serif;
+    }
+    body {
+      background: var(--bg); color: var(--txt);
+      min-height: 100vh; display: flex;
+      align-items: center; justify-content: center;
+      padding: 2rem;
+    }
+    .wrap { max-width: 560px; width: 100%; text-align: center; }
+
+    /* Terminal window */
+    .term-window {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 24px 80px rgba(0,0,0,.5);
+      margin-bottom: 2.5rem;
+      text-align: left;
+    }
+    .term-bar {
+      display: flex; align-items: center; gap: 6px;
+      background: var(--bg3); padding: .65rem 1rem;
+      border-bottom: 1px solid var(--border);
+    }
+    .dot { width: 9px; height: 9px; border-radius: 50%; }
+    .d-r { background: #ff5f56; } .d-y { background: #ffbd2e; } .d-g { background: #27c93f; }
+    .term-bar-title { flex:1; text-align:center; font-family:'JetBrains Mono',monospace; font-size:.7rem; color: var(--txt3); }
+
+    .term-body {
+      padding: 1.25rem 1.4rem;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: .82rem;
+      line-height: 1.9;
+    }
+    .line-prompt { color: var(--teal-light); }
+    .line-cmd    { color: var(--txt); }
+    .line-out    { color: var(--txt2); }
+    .line-err    { color: #f87171; }
+    .line-warn   { color: #facc15; }
+    .line-pass   { color: #4ade80; }
+    .line-empty  { display: block; height: .8em; }
+
+    /* 404 badge */
+    .badge-404 {
+      font-size: clamp(5rem, 18vw, 9rem);
+      font-weight: 900;
+      font-family: 'JetBrains Mono', monospace;
+      letter-spacing: -.06em;
+      background: linear-gradient(135deg, var(--teal-light), #818cf8);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      line-height: 1;
+      margin-bottom: .5rem;
+    }
+    .sub {
+      color: var(--txt2); font-size: .95rem; margin-bottom: 2rem; line-height: 1.6;
+    }
+    .btns { display: flex; gap: .75rem; justify-content: center; flex-wrap: wrap; }
+    .btn-home {
+      display: inline-flex; align-items: center; gap: .45rem;
+      background: var(--teal); color: #fff;
+      text-decoration: none; padding: .65rem 1.4rem;
+      border-radius: 8px; font-weight: 700; font-size: .88rem;
+      transition: background .2s;
+    }
+    .btn-home:hover { background: var(--teal-light); }
+    .btn-ghost {
+      display: inline-flex; align-items: center; gap: .45rem;
+      border: 1px solid var(--border); color: var(--txt2);
+      text-decoration: none; padding: .65rem 1.4rem;
+      border-radius: 8px; font-size: .88rem;
+      transition: border-color .2s, color .2s;
+    }
+    .btn-ghost:hover { border-color: var(--teal-light); color: var(--teal-light); }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="term-window">
+      <div class="term-bar">
+        <span class="dot d-r"></span>
+        <span class="dot d-y"></span>
+        <span class="dot d-g"></span>
+        <span class="term-bar-title">pytest — test_suite.py</span>
+      </div>
+      <div class="term-body">
+        <span class="line-prompt">$ </span><span class="line-cmd">pytest test_page.py -v</span><br>
+        <span class="line-empty"></span>
+        <span class="line-out">collecting ... </span><br>
+        <span class="line-err">ERROR  collecting test_page.py</span><br>
+        <span class="line-err">FileNotFoundError: [404] page does not exist</span><br>
+        <span class="line-empty"></span>
+        <span class="line-warn">WARN   This URL was never in the test plan</span><br>
+        <span class="line-warn">WARN   No assertions can be made on non-existent content</span><br>
+        <span class="line-empty"></span>
+        <span class="line-out">Traceback (most recent call last):</span><br>
+        <span class="line-out">&nbsp;&nbsp;File "router.py", line 42, in resolve</span><br>
+        <span class="line-out">&nbsp;&nbsp;&nbsp;&nbsp;raise HTTPException(status_code=404)</span><br>
+        <span class="line-err">HTTPException: 404 Not Found</span><br>
+        <span class="line-empty"></span>
+        <span class="line-out">───────── short test summary info ──────────</span><br>
+        <span class="line-err">FAILED test_page.py — 1 error, 0 passed</span><br>
+        <span class="line-empty"></span>
+        <span class="line-pass">Suggestion: navigate back to index and try again.</span>
+      </div>
+    </div>
+
+    <div class="badge-404">404</div>
+    <p class="sub">Test case not found.<br>The page you're looking for doesn't exist in this test suite.</p>
+    <div class="btns">
+      <a href="/" class="btn-home">← Back to Home</a>
+      <a href="/#experience" class="btn-ghost">View Experience</a>
+    </div>
+  </div>
+</body>
+</html>

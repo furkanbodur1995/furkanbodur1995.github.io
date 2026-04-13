@@ -170,10 +170,36 @@
           AI frameworks that auto-generate and run tests from natural language, so engineers can ship faster without sacrificing quality.
         </p>
         <div class="hero-btns" data-reveal data-delay="480">
-          <a href="Resume-Furkan-Bodur-EU2.pdf" download="Furkan-Bodur-CV.pdf" class="btn-primary">
-            <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-            Download CV
-          </a>
+          <div class="cv-preview-wrap">
+            <a href="Resume-Furkan-Bodur-EU2.pdf" download="Furkan-Bodur-CV.pdf" class="btn-primary" id="cvDownloadBtn">
+              <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+              Download CV
+            </a>
+            <div class="cv-preview-popup" id="cvPreviewPopup">
+              <div class="cv-preview-inner">
+                <div class="cv-preview-header">
+                  <span class="cv-preview-dot" style="background:#ff5f56"></span>
+                  <span class="cv-preview-dot" style="background:#ffbd2e"></span>
+                  <span class="cv-preview-dot" style="background:#27c93f"></span>
+                  <span class="cv-preview-title">Furkan-Bodur-CV.pdf</span>
+                </div>
+                <div class="cv-preview-body">
+                  <div class="cv-preview-name">Furkan Bodur</div>
+                  <div class="cv-preview-role">AI-First Test Engineer</div>
+                  <div class="cv-preview-divider"></div>
+                  <div class="cv-preview-line cv-line-long"></div>
+                  <div class="cv-preview-line cv-line-medium"></div>
+                  <div class="cv-preview-line cv-line-short"></div>
+                  <div class="cv-preview-divider"></div>
+                  <div class="cv-preview-line cv-line-long"></div>
+                  <div class="cv-preview-line cv-line-medium"></div>
+                  <div class="cv-preview-line cv-line-long"></div>
+                  <div class="cv-preview-line cv-line-short"></div>
+                </div>
+                <div class="cv-preview-footer">Click to download · PDF · 1 page</div>
+              </div>
+            </div>
+          </div>
           <a href="#experience" class="btn-ghost">View Experience ↓</a>
           <button class="btn-ghost btn-run-tests" id="runTestsBtn">
             <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg>
@@ -757,6 +783,7 @@
     <div class="tr-footer" id="trFooter">
       <span id="trPassed">0</span> / 6 passed
     </div>
+    <div class="tr-time" id="trTime"></div>
   </div>
 
   <!-- SCROLL TO TOP -->
