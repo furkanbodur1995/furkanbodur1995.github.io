@@ -1245,18 +1245,19 @@ Best,
 
 
 /* ────────────────────────────────────────
-   29. BUG CATCHER — Interactive background game
+   29. BUG CATCHER — Inspector Gadget arm from profile photo
 ──────────────────────────────────────── */
 (function initBugCatcher() {
-  if (window.matchMedia('(max-width: 820px)').matches) return;      // skip mobile
+  if (window.matchMedia('(max-width: 820px)').matches) return;
   if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 
   /* ── config ── */
-  const SPAWN_INTERVAL   = 4500;   // ms between bug spawns
-  const MAX_BUGS         = 6;      // max alive bugs
-  const CHAR_SPEED       = 2.2;    // px per frame (base)
-  const BUG_SPEED        = 0.6;    // px per frame (wander)
-  const CATCH_RADIUS     = 28;     // px to count as caught
+  const SPAWN_INTERVAL = 4500;
+  const MAX_BUGS       = 6;
+  const BUG_SPEED      = 0.6;
+  const ARM_SPEED      = 12;       // px per frame extend
+  const RETRACT_SPEED  = 16;
+  const GRAB_RADIUS    = 30;
   const BUG_COLORS = [
     '#f87171','#fb923c','#facc15','#a78bfa','#818cf8',
     '#f472b6','#34d399','#38bdf8','#c084fc','#e879f9',
@@ -1288,58 +1289,71 @@ Best,
   ];
 
   /* ── state ── */
-  let bugs     = [];
-  let caught   = 0;
-  // Start from the sidebar profile photo position
-  const sbAvatar = document.querySelector('.sb-avatar-img');
-  let charX, charY;
-  if (sbAvatar) {
-    const r = sbAvatar.getBoundingClientRect();
-    charX = r.left + r.width / 2;
-    charY = r.top + r.height / 2;
-  } else {
-    charX = 120;
-    charY = 120;
-  }
-  let targetBug = null;
-  let idle     = true;
-  let idleAngle = 0;
+  let bugs    = [];
+  let caught  = 0;
+  // arm states: 'idle' | 'extending' | 'retracting'
+  let armState = 'idle';
+  let armTarget = null;     // the bug we're reaching for
+  let handX = 0, handY = 0; // current hand tip position
+  let grabbedBug = null;    // bug attached to hand during retract
+  let cooldown = 0;
 
-  /* ── DOM: container ── */
+  /* ── origin: sidebar profile photo ── */
+  function getOrigin() {
+    const el = document.querySelector('.sb-avatar-img');
+    if (el) {
+      const r = el.getBoundingClientRect();
+      return { x: r.left + r.width / 2, y: r.top + r.height / 2 };
+    }
+    return { x: 120, y: 120 };
+  }
+
+  /* ── DOM ── */
   const container = document.createElement('div');
   container.id = 'bugCatcherLayer';
   container.style.cssText = 'position:fixed;inset:0;pointer-events:none;z-index:95;overflow:hidden;';
   document.body.appendChild(container);
 
-  /* ── DOM: character ── */
-  const charEl = document.createElement('div');
-  charEl.className = 'bc-char';
-  charEl.innerHTML = `
-    <span class="bc-horn bc-horn-l"></span>
-    <span class="bc-horn bc-horn-r"></span>
-    <span class="bc-arm bc-arm-l"><span class="bc-claw"></span></span>
-    <span class="bc-arm bc-arm-r"><span class="bc-claw"></span></span>
-    <img src="welcome.jpg" alt="" class="bc-char-img"/>
-    <span class="bc-char-leg bc-cl-l1"></span>
-    <span class="bc-char-leg bc-cl-r1"></span>
-    <span class="bc-char-leg bc-cl-l2"></span>
-    <span class="bc-char-leg bc-cl-r2"></span>
-    <span class="bc-char-net"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="var(--teal-light)" stroke-width="2"><circle cx="10" cy="10" r="7"/><line x1="15" y1="15" x2="22" y2="22" stroke-width="2.5" stroke-linecap="round"/><line x1="7" y1="7" x2="13" y2="13" opacity=".3"/><line x1="7" y1="13" x2="13" y2="7" opacity=".3"/></svg></span>
-  `;
-  container.appendChild(charEl);
-  updateCharPos();
+  // SVG arm line
+  const svgNS = 'http://www.w3.org/2000/svg';
+  const armSvg = document.createElementNS(svgNS, 'svg');
+  armSvg.setAttribute('class', 'bc-arm-svg');
+  armSvg.style.cssText = 'position:absolute;inset:0;width:100%;height:100%;pointer-events:none;';
+  container.appendChild(armSvg);
 
-  /* ── DOM: counter panel ── */
+  const armLine = document.createElementNS(svgNS, 'line');
+  armLine.setAttribute('stroke', 'var(--teal)');
+  armLine.setAttribute('stroke-width', '3');
+  armLine.setAttribute('stroke-linecap', 'round');
+  armLine.setAttribute('stroke-dasharray', '6 4');
+  armSvg.appendChild(armLine);
+
+  // Joints along the arm
+  const jointCount = 3;
+  const joints = [];
+  for (let i = 0; i < jointCount; i++) {
+    const j = document.createElementNS(svgNS, 'circle');
+    j.setAttribute('r', '3');
+    j.setAttribute('fill', 'var(--teal-light)');
+    j.style.display = 'none';
+    armSvg.appendChild(j);
+    joints.push(j);
+  }
+
+  // Hand (claw) element
+  const hand = document.createElement('div');
+  hand.className = 'bc-hand';
+  hand.innerHTML = '🤏';
+  hand.style.display = 'none';
+  container.appendChild(hand);
+
+  /* ── counter panel ── */
   const counter = document.createElement('div');
   counter.className = 'bc-counter';
   counter.innerHTML = '<span class="bc-counter-icon">🪲</span><span class="bc-counter-num">×0</span><span class="bc-counter-title">Junior Bug Squasher</span>';
-  // Append inside test run panel, after tr-time
   const trPanel = document.getElementById('testRunPanel');
-  if (trPanel) {
-    trPanel.appendChild(counter);
-  } else {
-    document.body.appendChild(counter);
-  }
+  if (trPanel) trPanel.appendChild(counter);
+  else document.body.appendChild(counter);
 
   /* ── helpers ── */
   function rand(a, b) { return a + Math.random() * (b - a); }
@@ -1350,25 +1364,36 @@ Best,
     return t;
   }
 
-  function getSpeed() {
-    return CHAR_SPEED + Math.floor(caught / 8) * 0.3;  // gets faster
-  }
-
-  function updateCharPos() {
-    charEl.style.transform = `translate(${charX}px, ${charY}px)`;
+  function updateArm(ox, oy, hx, hy, show) {
+    if (show) {
+      armLine.setAttribute('x1', ox);
+      armLine.setAttribute('y1', oy);
+      armLine.setAttribute('x2', hx);
+      armLine.setAttribute('y2', hy);
+      armLine.style.display = '';
+      // place joints evenly
+      for (let i = 0; i < jointCount; i++) {
+        const t = (i + 1) / (jointCount + 1);
+        joints[i].setAttribute('cx', ox + (hx - ox) * t);
+        joints[i].setAttribute('cy', oy + (hy - oy) * t);
+        joints[i].style.display = '';
+      }
+      hand.style.display = '';
+      hand.style.transform = `translate(${hx}px, ${hy}px)`;
+    } else {
+      armLine.style.display = 'none';
+      joints.forEach(j => j.style.display = 'none');
+      hand.style.display = 'none';
+    }
   }
 
   function spawnBug() {
     if (bugs.length >= MAX_BUGS) return;
-
-    const W = window.innerWidth;
-    const H = window.innerHeight;
+    const W = window.innerWidth, H = window.innerHeight;
     const bug = document.createElement('div');
     bug.className = 'bc-bug';
-
     const color = BUG_COLORS[Math.floor(Math.random() * BUG_COLORS.length)];
     const name  = BUG_NAMES[Math.floor(Math.random() * BUG_NAMES.length)];
-
     bug.innerHTML = `
       <span class="bc-tag" style="color:${color}">${name}</span>
       <span class="bc-antenna bc-ant-l" style="border-color:${color}"></span>
@@ -1387,32 +1412,27 @@ Best,
       <span class="bc-leg bc-leg-l" style="top:69%;background:${color}"></span>
       <span class="bc-leg bc-leg-r" style="top:69%;background:${color}"></span>
     `;
-
-    // spawn INSIDE the viewport with margin
-    const margin = 80;
+    const margin = 100;
     const x = rand(margin, W - margin);
     const y = rand(margin, H - margin);
-
     const bugData = {
       el: bug, x, y,
       vx: rand(-BUG_SPEED, BUG_SPEED),
       vy: rand(-BUG_SPEED, BUG_SPEED),
       wobble: rand(0, Math.PI * 2),
-      name: name,
+      name,
     };
-
     bug.style.transform = `translate(${x}px, ${y}px)`;
     container.appendChild(bug);
     bugs.push(bugData);
   }
 
-  function removeBug(bugData) {
-    bugs = bugs.filter(b => b !== bugData);
-    bugData.el.remove();
+  function removeBug(b) {
+    bugs = bugs.filter(v => v !== b);
+    b.el.remove();
   }
 
   function showCatchEffect(x, y, name) {
-    // pop particle
     const pop = document.createElement('div');
     pop.className = 'bc-pop';
     pop.textContent = '💥';
@@ -1420,7 +1440,6 @@ Best,
     container.appendChild(pop);
     setTimeout(() => pop.remove(), 600);
 
-    // label
     const label = document.createElement('div');
     label.className = 'bc-label';
     label.textContent = name;
@@ -1428,7 +1447,6 @@ Best,
     container.appendChild(label);
     setTimeout(() => label.remove(), 1800);
 
-    // +1 indicator
     const plus = document.createElement('div');
     plus.className = 'bc-plus';
     plus.textContent = '+1';
@@ -1437,20 +1455,19 @@ Best,
     setTimeout(() => plus.remove(), 900);
   }
 
-  function updateCounter() {
+  function updateCounterUI() {
     const prevTitle = counter.querySelector('.bc-counter-title').textContent;
     counter.querySelector('.bc-counter-num').textContent = `×${caught}`;
     const newTitle = getTitle();
     counter.querySelector('.bc-counter-title').textContent = newTitle;
     counter.classList.add('bc-counter-bump');
     setTimeout(() => counter.classList.remove('bc-counter-bump'), 300);
-
-    // Level up flash
     if (newTitle !== prevTitle && caught > 0) {
+      const o = getOrigin();
       const lvl = document.createElement('div');
       lvl.className = 'bc-levelup';
       lvl.innerHTML = `⬆ ${newTitle}`;
-      lvl.style.cssText = `left:${charX}px;top:${charY - 35}px;`;
+      lvl.style.cssText = `left:${o.x}px;top:${o.y - 60}px;`;
       container.appendChild(lvl);
       setTimeout(() => lvl.remove(), 2200);
     }
@@ -1458,95 +1475,136 @@ Best,
 
   /* ── game loop ── */
   function tick() {
-    const W = window.innerWidth;
-    const H = window.innerHeight;
+    const W = window.innerWidth, H = window.innerHeight;
+    const origin = getOrigin();
 
-    // move bugs (wander + flee from character)
+    // move bugs (wander)
     for (const b of bugs) {
       b.wobble += 0.03;
       b.vx += Math.sin(b.wobble) * 0.04;
       b.vy += Math.cos(b.wobble * 0.7) * 0.04;
 
-      // flee: if character is nearby, run away
-      const fdx = b.x - charX;
-      const fdy = b.y - charY;
-      const fdist = Math.sqrt(fdx * fdx + fdy * fdy);
-      if (fdist < 120 && fdist > 0) {
-        const fleeFactor = 0.15 * (1 - fdist / 120);
-        b.vx += (fdx / fdist) * fleeFactor;
-        b.vy += (fdy / fdist) * fleeFactor;
+      // flee from hand when arm is extending
+      if (armState === 'extending') {
+        const fdx = b.x - handX, fdy = b.y - handY;
+        const fd = Math.sqrt(fdx * fdx + fdy * fdy);
+        if (fd < 100 && fd > 0) {
+          b.vx += (fdx / fd) * 0.12;
+          b.vy += (fdy / fd) * 0.12;
+        }
       }
 
-      // clamp speed
       const spd = Math.sqrt(b.vx * b.vx + b.vy * b.vy);
       if (spd > BUG_SPEED * 2) { b.vx *= 0.93; b.vy *= 0.93; }
-      // keep in bounds (hard clamp + bounce)
       const PAD = 40;
       if (b.x < PAD)     { b.x = PAD;     b.vx = Math.abs(b.vx) * 0.5 + 0.2; }
       if (b.x > W - PAD) { b.x = W - PAD; b.vx = -Math.abs(b.vx) * 0.5 - 0.2; }
       if (b.y < PAD)     { b.y = PAD;     b.vy = Math.abs(b.vy) * 0.5 + 0.2; }
       if (b.y > H - PAD) { b.y = H - PAD; b.vy = -Math.abs(b.vy) * 0.5 - 0.2; }
-
-      b.x += b.vx;
-      b.y += b.vy;
+      b.x += b.vx; b.y += b.vy;
       b.el.style.transform = `translate(${b.x}px, ${b.y}px) rotate(${Math.atan2(b.vy, b.vx) * 180 / Math.PI}deg)`;
     }
 
-    // find nearest bug
-    let nearest = null;
-    let nearDist = Infinity;
-    for (const b of bugs) {
-      const dx = b.x - charX;
-      const dy = b.y - charY;
-      const dist = Math.sqrt(dx * dx + dy * dy);
-      if (dist < nearDist) { nearDist = dist; nearest = b; }
+    // ARM STATE MACHINE
+    if (armState === 'idle') {
+      cooldown--;
+      updateArm(0, 0, 0, 0, false);
+      if (cooldown <= 0 && bugs.length > 0) {
+        // pick nearest bug
+        let best = null, bestD = Infinity;
+        for (const b of bugs) {
+          const dx = b.x - origin.x, dy = b.y - origin.y;
+          const d = Math.sqrt(dx * dx + dy * dy);
+          if (d < bestD) { bestD = d; best = b; }
+        }
+        if (best) {
+          armTarget = best;
+          handX = origin.x;
+          handY = origin.y;
+          armState = 'extending';
+          hand.innerHTML = '🤏';
+        }
+      }
     }
 
-    if (nearest) {
-      idle = false;
-      targetBug = nearest;
-      const dx = nearest.x - charX;
-      const dy = nearest.y - charY;
-      const dist = Math.sqrt(dx * dx + dy * dy);
-      const speed = getSpeed();
+    else if (armState === 'extending') {
+      if (!armTarget || !bugs.includes(armTarget)) {
+        armState = 'retracting';
+        grabbedBug = null;
+      } else {
+        // move hand toward target bug
+        const dx = armTarget.x - handX;
+        const dy = armTarget.y - handY;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+        if (dist > ARM_SPEED) {
+          handX += (dx / dist) * ARM_SPEED;
+          handY += (dy / dist) * ARM_SPEED;
+        } else {
+          handX = armTarget.x;
+          handY = armTarget.y;
+        }
+        updateArm(origin.x, origin.y, handX, handY, true);
 
-      if (dist > speed) {
-        charX += (dx / dist) * speed;
-        charY += (dy / dist) * speed;
+        // check grab
+        const gd = Math.sqrt((armTarget.x - handX) ** 2 + (armTarget.y - handY) ** 2);
+        if (gd < GRAB_RADIUS) {
+          // got it!
+          grabbedBug = armTarget;
+          hand.innerHTML = '✊';
+          armState = 'retracting';
+        }
+
+        // safety: if arm extends too far, retract
+        const armLen = Math.sqrt((handX - origin.x) ** 2 + (handY - origin.y) ** 2);
+        if (armLen > Math.max(W, H) * 0.85) {
+          armState = 'retracting';
+          grabbedBug = null;
+        }
       }
-
-      // flip character toward bug
-      charEl.classList.toggle('bc-char-flip', dx < 0);
-
-      // catch!
-      if (dist < CATCH_RADIUS) {
-        caught++;
-        showCatchEffect(nearest.x, nearest.y, nearest.name);
-        removeBug(nearest);
-        targetBug = null;
-        updateCounter();
-        // net swing animation
-        charEl.classList.add('bc-swing');
-        setTimeout(() => charEl.classList.remove('bc-swing'), 400);
-      }
-    } else {
-      // idle: wander slowly
-      idle = true;
-      idleAngle += 0.008;
-      charX += Math.cos(idleAngle) * 0.3;
-      charY += Math.sin(idleAngle * 0.6) * 0.3;
-      // keep in bounds
-      charX = Math.max(30, Math.min(W - 30, charX));
-      charY = Math.max(30, Math.min(H - 30, charY));
     }
 
-    charEl.classList.toggle('bc-char-idle', idle);
-    updateCharPos();
+    else if (armState === 'retracting') {
+      const dx = origin.x - handX;
+      const dy = origin.y - handY;
+      const dist = Math.sqrt(dx * dx + dy * dy);
+
+      if (dist > RETRACT_SPEED) {
+        handX += (dx / dist) * RETRACT_SPEED;
+        handY += (dy / dist) * RETRACT_SPEED;
+      } else {
+        handX = origin.x;
+        handY = origin.y;
+      }
+
+      // drag the grabbed bug along
+      if (grabbedBug && bugs.includes(grabbedBug)) {
+        grabbedBug.x = handX;
+        grabbedBug.y = handY;
+        grabbedBug.el.style.transform = `translate(${handX}px, ${handY}px) scale(0.8)`;
+      }
+
+      updateArm(origin.x, origin.y, handX, handY, true);
+
+      // arrived back at origin
+      if (dist <= RETRACT_SPEED) {
+        if (grabbedBug && bugs.includes(grabbedBug)) {
+          caught++;
+          showCatchEffect(origin.x + 30, origin.y, grabbedBug.name);
+          removeBug(grabbedBug);
+          updateCounterUI();
+        }
+        grabbedBug = null;
+        armTarget = null;
+        armState = 'idle';
+        cooldown = 60; // ~1 sec pause before next grab
+        updateArm(0, 0, 0, 0, false);
+      }
+    }
+
     requestAnimationFrame(tick);
   }
 
   /* ── start ── */
-  // initial delay so page loads calmly first
   setTimeout(() => {
     spawnBug();
     requestAnimationFrame(tick);
