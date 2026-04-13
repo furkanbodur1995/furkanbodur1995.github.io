@@ -195,7 +195,7 @@ setTimeout(type, 700);
     if (clickSpawnCount > 4) {
       // show cooldown toast
       clickSpawnCount = 0;
-      clickCooldownUntil = now + 3000;
+      clickCooldownUntil = now + 5000;
       const msg = COOLDOWN_MSGS[Math.floor(Math.random() * COOLDOWN_MSGS.length)];
       const toast = document.createElement('div');
       toast.className = 'bc-cooldown-toast';
@@ -1125,7 +1125,7 @@ PASSED  test_ai_pipeline
 PASSED  test_project
 PASSED  test_skills
 
-6 passed in ${elapsed}s — no warnings, no regressions.
+6 passed in ${elapsed} — no warnings, no regressions.
 
 Based on these results, I'd like to move forward with an interview.
 
@@ -1288,8 +1288,8 @@ Best,
   if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 
   /* ── config ── */
-  const SPAWN_INTERVAL = 4500;
-  const MAX_BUGS       = 6;
+  const SPAWN_INTERVAL = 15000;
+  const MAX_BUGS       = 3;
   const BUG_SPEED      = 0.6;
   const ARM_SPEED      = 5;        // px per frame extend (slow so people notice)
   const RETRACT_SPEED  = 7;
@@ -1347,7 +1347,7 @@ Best,
   /* ── DOM ── */
   const container = document.createElement('div');
   container.id = 'bugCatcherLayer';
-  container.style.cssText = 'position:fixed;inset:0;pointer-events:none;z-index:95;overflow:hidden;';
+  container.style.cssText = 'position:fixed;inset:0;pointer-events:none;z-index:95;overflow:hidden;opacity:.55;';
   document.body.appendChild(container);
 
   // SVG arm line
