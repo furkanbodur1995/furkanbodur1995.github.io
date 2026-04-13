@@ -1138,54 +1138,66 @@ if (tlLine && tlSection) {
 (function initRadarHover() {
   const svg = document.getElementById('radarSvg');
   if (!svg) return;
+  // skip on touch devices
+  if (window.matchMedia('(hover: none)').matches) return;
 
   const SKILLS = [
     { label: 'AI & LLM',    val: 95, tags: ['MCP','RAG','pgvector','LLM APIs'] },
-    { label: 'Automation',  val: 92, tags: ['Playwright','Selenium','pytest','BDD'] },
-    { label: 'CI/CD',       val: 80, tags: ['Jenkins','GitLab','Docker','SQL'] },
-    { label: 'QA Strategy', val: 88, tags: ['ISTQB×3','Risk-based','Exploratory'] },
-    { label: 'API Testing', val: 85, tags: ['Postman','SoapUI','Security','RBAC'] },
-    { label: 'Leadership',  val: 78, tags: ['Mentoring','Process design','Docs'] },
+    { label: 'QA Strategy', val: 90, tags: ['ISTQB×3','Risk-based','Exploratory'] },
+    { label: 'Automation',  val: 88, tags: ['Playwright','Selenium','pytest','BDD'] },
+    { label: 'CI/CD',       val: 72, tags: ['Jenkins','GitLab','Docker','SQL'] },
+    { label: 'Security',    val: 68, tags: ['Postman','SoapUI','RBAC','API sec'] },
+    { label: 'Domain',      val: 82, tags: ['UAV Systems','Aerospace QA','ERP'] },
   ];
 
-  // tooltip element
   const tip = document.createElement('div');
   tip.style.cssText = `
     position:fixed;background:var(--bg2);border:1px solid var(--teal-border);
-    border-radius:8px;padding:.5rem .75rem;font-size:.72rem;color:var(--txt);
+    border-radius:8px;padding:.5rem .8rem;font-size:.72rem;color:var(--txt);
     pointer-events:none;opacity:0;transition:opacity .15s;z-index:500;
     font-family:'JetBrains Mono',monospace;white-space:nowrap;
-    box-shadow:0 8px 24px rgba(0,0,0,.35);
+    box-shadow:0 8px 24px rgba(0,0,0,.4);line-height:1.6;
   `;
   document.body.appendChild(tip);
 
   function showTip(e, skill) {
-    tip.innerHTML = `<strong style="color:var(--teal-light)">${skill.label}</strong> · ${skill.val}/100<br>
-      <span style="color:var(--txt3)">${skill.tags.join(' · ')}</span>`;
+    tip.innerHTML = `<strong style="color:var(--teal-light)">${skill.label}</strong> <span style="color:var(--txt3)">· ${skill.val}/100</span><br><span style="color:var(--txt2)">${skill.tags.join(' · ')}</span>`;
     tip.style.opacity = '1';
     moveTip(e);
   }
   function moveTip(e) {
-    tip.style.left = (e.clientX + 14) + 'px';
-    tip.style.top  = (e.clientY - 10) + 'px';
+    const tw = tip.offsetWidth, th = tip.offsetHeight;
+    let x = e.clientX + 16, y = e.clientY - 10;
+    if (x + tw > window.innerWidth  - 8) x = e.clientX - tw - 12;
+    if (y + th > window.innerHeight - 8) y = e.clientY - th - 6;
+    tip.style.left = x + 'px';
+    tip.style.top  = y + 'px';
   }
   function hideTip() { tip.style.opacity = '0'; }
 
-  // Observe for when radar axes are drawn (JS draws them), then attach hover
-  const mo = new MutationObserver(() => {
-    const axes = svg.querySelectorAll('[data-radar-axis]');
-    if (!axes.length) return;
-    axes.forEach((ax, i) => {
-      const skill = SKILLS[i];
+  function attachHover() {
+    // axes lines + labels both carry data-radar-axis
+    const els = svg.querySelectorAll('[data-radar-axis]');
+    els.forEach(el => {
+      const idx   = parseInt(el.getAttribute('data-radar-axis'), 10);
+      const skill = SKILLS[idx];
       if (!skill) return;
-      ax.style.cursor = 'pointer';
-      ax.addEventListener('mouseenter', e => showTip(e, skill));
-      ax.addEventListener('mousemove',  e => moveTip(e));
-      ax.addEventListener('mouseleave', hideTip);
+      el.style.cursor = 'pointer';
+      el.addEventListener('mouseenter', e => showTip(e, skill));
+      el.addEventListener('mousemove',  e => moveTip(e));
+      el.addEventListener('mouseleave', hideTip);
     });
-    mo.disconnect();
-  });
-  mo.observe(svg, { childList: true, subtree: true });
+  }
+
+  // Radar draws lazily on scroll. Poll until elements appear (max 10s).
+  let tries = 0;
+  const poll = setInterval(() => {
+    if (svg.querySelectorAll('[data-radar-axis]').length > 0) {
+      clearInterval(poll);
+      attachHover();
+    }
+    if (++tries > 100) clearInterval(poll);
+  }, 100);
 })();
 
 
