@@ -26,6 +26,10 @@ function applyTheme(theme) {
   document.querySelectorAll('.theme-label').forEach(el => el.textContent = meta.label);
   const mBtn = document.getElementById('themeToggleMobile');
   if (mBtn) mBtn.textContent = meta.icon;
+  // floating buttons — mark active
+  document.querySelectorAll('.tf-btn').forEach(b => {
+    b.classList.toggle('tf-active', b.dataset.themeVal === theme);
+  });
   generateUAVStars();
 }
 
@@ -36,6 +40,10 @@ function toggleTheme() {
 
 document.getElementById('themeToggle')?.addEventListener('click', toggleTheme);
 document.getElementById('themeToggleMobile')?.addEventListener('click', toggleTheme);
+// floating theme buttons
+document.querySelectorAll('.tf-btn').forEach(btn => {
+  btn.addEventListener('click', () => applyTheme(btn.dataset.themeVal));
+});
 // init
 applyTheme('dark');
 
@@ -167,10 +175,38 @@ setTimeout(type, 700);
   document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; });
   document.addEventListener('mouseleave', () => { mx = -9999; my = -9999; });
 
-  // Click burst
+  // Click burst → spawn bug on click
+  let clickSpawnCount = 0;
+  let clickCooldownUntil = 0;
+  const COOLDOWN_MSGS = [
+    '🙅 Easy tiger, bugs need time to respawn!',
+    '☕ Chill, grab a coffee first.',
+    '🚫 Bug factory on break. Try again in 3s.',
+    '🤔 You click faster than I can catch them.',
+    '🪲 Bugs are unionized. Mandatory cooldown.',
+    '🚨 Click limit reached. QA needs a break too.',
+  ];
   document.addEventListener('click', e => {
-    // skip clicks on interactive UI elements
-    if (e.target.closest('a,button,input,select,textarea,.sidebar,.copy-toast,.rt-overlay,.kb-hint')) return;
+    if (e.target.closest('a,button,input,select,textarea,.sidebar,.copy-toast,.rt-overlay,.kb-hint,.tr-panel')) return;
+    if (!window._bugSpawnFn) return;
+    const now = Date.now();
+    if (now < clickCooldownUntil) return; // still in cooldown, ignore silently
+    clickSpawnCount++;
+    if (clickSpawnCount > 4) {
+      // show cooldown toast
+      clickSpawnCount = 0;
+      clickCooldownUntil = now + 3000;
+      const msg = COOLDOWN_MSGS[Math.floor(Math.random() * COOLDOWN_MSGS.length)];
+      const toast = document.createElement('div');
+      toast.className = 'bc-cooldown-toast';
+      toast.textContent = msg;
+      toast.style.cssText = `left:${e.clientX}px;top:${e.clientY - 30}px;`;
+      document.getElementById('bugCatcherLayer')?.appendChild(toast);
+      setTimeout(() => toast.remove(), 2500);
+      return;
+    }
+    window._bugSpawnFn(e.clientX, e.clientY);
+    // ripple on stars still works
     ripples.push({ x: e.clientX, y: e.clientY, t: performance.now() });
     const cx = e.clientX, cy = e.clientY;
     for (const d of dots) {
@@ -1255,8 +1291,8 @@ Best,
   const SPAWN_INTERVAL = 4500;
   const MAX_BUGS       = 6;
   const BUG_SPEED      = 0.6;
-  const ARM_SPEED      = 12;       // px per frame extend
-  const RETRACT_SPEED  = 16;
+  const ARM_SPEED      = 5;        // px per frame extend (slow so people notice)
+  const RETRACT_SPEED  = 7;
   const GRAB_RADIUS    = 30;
   const BUG_COLORS = [
     '#f87171','#fb923c','#facc15','#a78bfa','#818cf8',
@@ -1303,9 +1339,9 @@ Best,
     const el = document.querySelector('.sb-avatar-img');
     if (el) {
       const r = el.getBoundingClientRect();
-      return { x: r.left + r.width / 2, y: r.top + r.height / 2 };
+      return { x: r.left + r.width / 2, y: r.bottom + 4 };
     }
-    return { x: 120, y: 120 };
+    return { x: 120, y: 180 };
   }
 
   /* ── DOM ── */
@@ -1323,7 +1359,7 @@ Best,
 
   const armLine = document.createElementNS(svgNS, 'line');
   armLine.setAttribute('stroke', 'var(--teal)');
-  armLine.setAttribute('stroke-width', '3');
+  armLine.setAttribute('stroke-width', '5');
   armLine.setAttribute('stroke-linecap', 'round');
   armLine.setAttribute('stroke-dasharray', '6 4');
   armSvg.appendChild(armLine);
@@ -1333,7 +1369,7 @@ Best,
   const joints = [];
   for (let i = 0; i < jointCount; i++) {
     const j = document.createElementNS(svgNS, 'circle');
-    j.setAttribute('r', '3');
+    j.setAttribute('r', '5');
     j.setAttribute('fill', 'var(--teal-light)');
     j.style.display = 'none';
     armSvg.appendChild(j);
@@ -1426,6 +1462,15 @@ Best,
     container.appendChild(bug);
     bugs.push(bugData);
   }
+
+  // expose spawn at click position for global click handler
+  window._bugSpawnFn = function(cx, cy) {
+    if (bugs.length >= MAX_BUGS) return;
+    spawnBug();
+    // move the last spawned bug to click position
+    const b = bugs[bugs.length - 1];
+    if (b) { b.x = cx; b.y = cy; b.el.style.transform = `translate(${cx}px,${cy}px)`; }
+  };
 
   function removeBug(b) {
     bugs = bugs.filter(v => v !== b);
