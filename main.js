@@ -936,3 +936,41 @@ if (tlLine && tlSection) {
   }, { threshold: 0.3 });
   obs.observe(svgEl);
 })();
+
+
+/* ────────────────────────────────────────
+   24. TERMINAL SECTION PROMPTS (typewriter)
+──────────────────────────────────────── */
+(function initTerminalPrompts() {
+  const SPEED = 38;
+
+  function typeInto(el) {
+    const text = el.dataset.typeterm;
+    if (!text || el.dataset.typed) return;
+    el.dataset.typed = '1';
+    el.classList.add('typing');
+    el.textContent = '';
+    let i = 0;
+    function next() {
+      if (i < text.length) {
+        el.textContent += text[i++];
+        setTimeout(next, SPEED + Math.random() * 18);
+      } else {
+        el.classList.remove('typing');
+        el.classList.add('done');
+      }
+    }
+    next();
+  }
+
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (!entry.isIntersecting) return;
+      const cmd = entry.target.querySelector('.s-cmd[data-typeterm]');
+      if (cmd) typeInto(cmd);
+      obs.unobserve(entry.target);
+    });
+  }, { rootMargin: '-15% 0px -15% 0px' });
+
+  document.querySelectorAll('.section-head').forEach(head => obs.observe(head));
+})();

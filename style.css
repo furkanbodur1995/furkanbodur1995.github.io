@@ -1205,3 +1205,37 @@ kbd {
   .impact-row { grid-template-columns: 1fr 1fr; }
   .proj-features { grid-template-columns: 1fr; }
 }
+
+/* ─── TERMINAL THEME — section-head prompts ─── */
+.s-prompt {
+  display: flex;
+  align-items: center;
+  gap: .4rem;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: .8rem;
+  margin-bottom: .6rem;
+  min-height: 1.4em;
+}
+.s-prompt-char {
+  color: var(--teal-light);
+  font-weight: 700;
+  user-select: none;
+}
+.s-cmd { color: var(--txt2); position: relative; }
+.s-cmd.typing::after,
+.s-cmd.done::after {
+  content: '█';
+  color: var(--teal-light);
+  margin-left: 1px;
+  animation: termBlink .7s step-start infinite;
+}
+@keyframes termBlink {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0; }
+}
+.s-comment {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: .8em;
+  color: var(--txt3);
+  user-select: none;
+}
