@@ -1284,4 +1284,21 @@ kbd {
   0%, 100% { opacity: 1; }
   50%       { opacity: .65; }
 }
+.tr-hire-btn {
+  display: block;
+  width: 100%;
+  padding: .55rem .75rem;
+  background: linear-gradient(135deg, var(--teal), #4ade80);
+  border: none;
+  color: #fff;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: .72rem;
+  font-weight: 800;
+  letter-spacing: .05em;
+  cursor: pointer;
+  animation: trHirePulse 1.4s ease-in-out infinite;
+  transition: filter .15s, transform .1s;
+}
+.tr-hire-btn:hover  { filter: brightness(1.15); }
+.tr-hire-btn:active { transform: scale(.97); }
 @media (max-width: 820px) { .tr-panel { display: none; } }

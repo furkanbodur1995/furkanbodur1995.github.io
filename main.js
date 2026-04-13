@@ -950,9 +950,9 @@ if (tlLine && tlSection) {
   const ORDER      = ['about','experience','careermap','pipeline','project','skills'];
   const TOTAL      = ORDER.length;
   const PASS_DELAY = 480;
-  let passed   = 0;
+  let passed    = 0;
   let observing = false;
-  let settled   = false; // ignores the initial synchronous observer fire
+  let settled   = false;
 
   function getItem(id) {
     return panel.querySelector(`.tr-item[data-tr-section="${id}"]`);
@@ -961,23 +961,22 @@ if (tlLine && tlSection) {
     item.querySelector('.tr-status').setAttribute('data-status', status);
     item.setAttribute('data-state', status);
   }
+  function onPass() {
+    passed++;
+    if (passedEl) passedEl.textContent = passed;
+    if (passed === TOTAL && footer) showHireBtn();
+  }
 
   const sectionObs = new IntersectionObserver(entries => {
-    if (!settled) return; // ignore initial fire for already-visible elements
+    if (!settled) return;
     entries.forEach(entry => {
       const item = getItem(entry.target.id);
       if (!item) return;
+      if (entry.target.id === 'about') return; // handled separately
       const already = item.querySelector('.tr-status').getAttribute('data-status') === 'pass';
       if (entry.isIntersecting && !already) {
         setStatus(item, 'running');
-        setTimeout(() => {
-          setStatus(item, 'pass');
-          passed++;
-          passedEl.textContent = passed;
-          if (passed === TOTAL && footer) {
-            footer.innerHTML = '<span class="tr-footer-hire">✅ ALL PASSED · HIRE!!</span>';
-          }
-        }, PASS_DELAY);
+        setTimeout(() => { setStatus(item, 'pass'); onPass(); }, PASS_DELAY);
       }
     });
   }, { rootMargin: '-20% 0px -20% 0px', threshold: 0 });
@@ -985,11 +984,18 @@ if (tlLine && tlSection) {
   function startObserving() {
     if (observing) return;
     observing = true;
-    ORDER.forEach(id => {
+
+    // test_about: instantly running when panel appears, auto-passes after 900ms
+    const aboutItem = getItem('about');
+    if (aboutItem) {
+      setStatus(aboutItem, 'running');
+      setTimeout(() => { setStatus(aboutItem, 'pass'); onPass(); }, 900);
+    }
+
+    ORDER.filter(id => id !== 'about').forEach(id => {
       const el = document.getElementById(id);
       if (el) sectionObs.observe(el);
     });
-    // Let the observer's initial synchronous calls fire+ignore, then open the gate
     requestAnimationFrame(() => setTimeout(() => { settled = true; }, 80));
   }
 
@@ -997,4 +1003,90 @@ if (tlLine && tlSection) {
     if (!panel.classList.contains('visible')) panel.classList.add('visible');
     startObserving();
   }, { passive: true });
+
+  /* ── HIRE ME button ── */
+  function showHireBtn() {
+    footer.innerHTML = '<button class="tr-hire-btn" id="trHireBtn">🎉 HIRE ME!</button>';
+    document.getElementById('trHireBtn').addEventListener('click', () => {
+      launchConfetti();
+      showHireToast();
+    });
+  }
+
+  function launchConfetti() {
+    const cvs = document.createElement('canvas');
+    cvs.style.cssText = 'position:fixed;inset:0;width:100%;height:100%;z-index:9999;pointer-events:none;';
+    document.body.appendChild(cvs);
+    cvs.width  = window.innerWidth;
+    cvs.height = window.innerHeight;
+    const ctx    = cvs.getContext('2d');
+    const COLORS = ['#14b8a6','#4ade80','#facc15','#f87171','#818cf8','#fb923c','#38bdf8'];
+    const parts  = [];
+
+    [0.2, 0.5, 0.8].forEach(xRatio => {
+      for (let i = 0; i < 55; i++) {
+        const angle = Math.random() * Math.PI * 2;
+        const spd   = 7 + Math.random() * 14;
+        parts.push({
+          x: cvs.width * xRatio, y: cvs.height * 0.65,
+          vx: Math.cos(angle) * spd, vy: Math.sin(angle) * spd - 10,
+          color: COLORS[Math.floor(Math.random() * COLORS.length)],
+          w: 5 + Math.random() * 7, h: 3 + Math.random() * 4,
+          rot: Math.random() * 360, rotV: (Math.random() - 0.5) * 14,
+          gravity: 0.38, alpha: 1,
+        });
+      }
+    });
+
+    let frame = 0;
+    const MAX = 150;
+    (function draw() {
+      ctx.clearRect(0, 0, cvs.width, cvs.height);
+      frame++;
+      for (const p of parts) {
+        p.x += p.vx; p.y += p.vy;
+        p.vy += p.gravity; p.vx *= 0.98;
+        p.rot += p.rotV;
+        p.alpha = Math.max(0, 1 - frame / MAX);
+        if (p.alpha <= 0) continue;
+        ctx.save();
+        ctx.globalAlpha = p.alpha;
+        ctx.translate(p.x, p.y);
+        ctx.rotate(p.rot * Math.PI / 180);
+        ctx.fillStyle = p.color;
+        ctx.fillRect(-p.w / 2, -p.h / 2, p.w, p.h);
+        ctx.restore();
+      }
+      if (frame < MAX) requestAnimationFrame(draw); else cvs.remove();
+    })();
+  }
+
+  function showHireToast() {
+    const msgs = [
+      '🚀 Forwarding your CV to Google, Apple & Netflix...',
+      '📨 Sending offer letter... please hold.',
+      '🤝 HR has been notified. Salary negotiation incoming.',
+    ];
+    const t = document.createElement('div');
+    t.textContent = msgs[Math.floor(Math.random() * msgs.length)];
+    t.style.cssText = `
+      position:fixed;bottom:5rem;left:50%;
+      transform:translateX(-50%) translateY(20px);
+      background:var(--bg3);border:1px solid var(--teal-border);
+      color:var(--txt);font-family:'JetBrains Mono',monospace;font-size:.73rem;
+      padding:.65rem 1.3rem;border-radius:9px;z-index:9998;
+      opacity:0;transition:opacity .3s,transform .3s;white-space:nowrap;
+      box-shadow:0 8px 32px rgba(0,0,0,.35);
+    `;
+    document.body.appendChild(t);
+    requestAnimationFrame(() => {
+      t.style.opacity = '1';
+      t.style.transform = 'translateX(-50%) translateY(0)';
+    });
+    setTimeout(() => {
+      t.style.opacity = '0';
+      t.style.transform = 'translateX(-50%) translateY(20px)';
+      setTimeout(() => t.remove(), 400);
+    }, 3500);
+  }
 })();
