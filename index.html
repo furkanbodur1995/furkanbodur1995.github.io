@@ -1,0 +1,710 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Furkan Bodur — AI-First Test Engineer</title>
+  <meta name="description" content="Senior QA Expert &amp; AI-First Test Engineer with 8+ years in aerospace and enterprise software. ISTQB Advanced ×3, LLM test automation, Playwright, RAG pipelines. EU work authorized." />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Furkan Bodur — AI-First Test Engineer" />
+  <meta property="og:description" content="8+ years QA · Triple ISTQB Advanced · AI-driven test automation · EU work authorized, no sponsorship needed." />
+  <meta property="og:image" content="welcome.jpg" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Furkan Bodur — AI-First Test Engineer" />
+  <meta name="twitter:description" content="8+ years QA · Triple ISTQB Advanced · AI-driven test automation · EU work authorized." />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><defs><linearGradient id='g' x1='0' y1='0' x2='1' y2='1'><stop offset='0' stop-color='%2314b8a6'/><stop offset='1' stop-color='%230d9488'/></linearGradient></defs><rect width='100' height='100' rx='22' fill='url(%23g)'/><text x='50' y='67' font-size='46' font-family='system-ui,sans-serif' font-weight='900' fill='white' text-anchor='middle' letter-spacing='-2'>FB</text></svg>" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- SCROLL PROGRESS BAR -->
+  <div id="scrollProgress" class="scroll-progress"></div>
+
+  <!-- MOBILE HEADER -->
+  <header class="mobile-header" id="mobileHeader">
+    <button class="hamburger" id="hamburger" aria-label="Open menu">
+      <span></span><span></span><span></span>
+    </button>
+    <span class="mobile-logo">FB</span>
+    <button class="theme-btn-mobile" id="themeToggleMobile" aria-label="Toggle theme">☀️</button>
+  </header>
+
+  <!-- SIDEBAR OVERLAY (mobile) -->
+  <div class="sb-overlay" id="sbOverlay"></div>
+
+  <!-- ═══ SIDEBAR ═══ -->
+  <aside class="sidebar" id="sidebar">
+
+    <div class="sb-profile">
+      <div class="sb-avatar">
+        <img src="welcome.jpg" alt="Furkan Bodur" class="sb-avatar-img" />
+        <div class="sb-avatar-ring"></div>
+      </div>
+      <div class="sb-name">Furkan Bodur</div>
+      <div class="sb-role">AI-First Test Engineer</div>
+      <div class="sb-location">
+        <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+        Relocating to EU
+      </div>
+      <div class="sb-visa-note">EU work authorized · No sponsorship needed</div>
+    </div>
+
+    <div class="sb-divider"></div>
+
+    <!-- CONTACT -->
+    <div class="sb-block">
+      <div class="sb-block-label">Contact</div>
+      <button class="sb-link sb-email-btn" id="copyEmailBtn" title="Click to copy">
+        <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+        <span id="copyEmailTxt">furkan.bodur1995@gmail.com</span>
+        <span class="copy-badge" id="copyBadge">Copied!</span>
+      </button>
+      <a href="https://www.linkedin.com/in/furkan-bodur-38b4ab98/" target="_blank" rel="noopener" class="sb-link">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-4 0v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+        LinkedIn
+      </a>
+      <a href="https://github.com/furkanbodur1995" target="_blank" rel="noopener" class="sb-link">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
+        GitHub
+      </a>
+      <a href="Resume-Furkan-Bodur-EU2.pdf" download class="sb-cv-btn">
+        <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        Download CV
+      </a>
+    </div>
+
+    <div class="sb-divider"></div>
+
+    <!-- LANGUAGES -->
+    <div class="sb-block">
+      <div class="sb-block-label">Languages</div>
+      <div class="sb-lang"><span class="sb-lang-flag">🇹🇷</span><span class="sb-lang-name">Turkish</span><span class="sb-lang-level">Native</span></div>
+      <div class="sb-lang"><span class="sb-lang-flag">EN</span><span class="sb-lang-name">English</span><span class="sb-lang-level">Professional</span></div>
+    </div>
+
+    <div class="sb-divider"></div>
+
+    <!-- ISTQB CERTS -->
+    <div class="sb-block">
+      <div class="sb-block-label">ISTQB Advanced × 3</div>
+      <div class="sb-cert"><span class="sb-cert-dot"></span>Technical Test Analyst</div>
+      <div class="sb-cert"><span class="sb-cert-dot"></span>Test Manager</div>
+      <div class="sb-cert"><span class="sb-cert-dot"></span>Test Automation Engineer</div>
+    </div>
+
+    <div class="sb-divider"></div>
+
+    <!-- BUILDING NOW -->
+    <div class="sb-block">
+      <div class="sb-block-label">Currently Building</div>
+      <div class="sb-building">
+        <span class="sb-building-dot"></span>
+        <div>
+          <div class="sb-building-title">Playwright Generator</div>
+          <div class="sb-building-sub">Phase 1 — RAG-powered test code generation from semantic knowledge base</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="sb-divider"></div>
+
+    <!-- NAV -->
+    <nav class="sb-nav">
+      <a href="#about"      class="sb-nav-link" data-section="about">About</a>
+      <a href="#experience" class="sb-nav-link" data-section="experience">Experience</a>
+      <a href="#careermap"  class="sb-nav-link" data-section="careermap">Career Map</a>
+      <a href="#pipeline"   class="sb-nav-link" data-section="pipeline">AI Pipeline</a>
+      <a href="#project"    class="sb-nav-link" data-section="project">Project</a>
+      <a href="#skills"     class="sb-nav-link" data-section="skills">Skills</a>
+    </nav>
+
+    <div class="sb-bottom">
+      <button class="theme-toggle" id="themeToggle">
+        <span class="theme-icon">☀️</span>
+        <span class="theme-label">Light mode</span>
+      </button>
+    </div>
+  </aside>
+
+  <!-- ═══ MAIN CONTENT ═══ -->
+  <main class="main-content">
+
+    <!-- MOBILE PROFILE STRIP (hidden on desktop) -->
+    <div class="mob-profile-strip">
+      <img src="welcome.jpg" alt="Furkan Bodur" class="mob-avatar-img" />
+      <div class="mob-prof-info">
+        <div class="mob-prof-name">Furkan Bodur</div>
+        <div class="mob-prof-role">AI-First Test Engineer</div>
+      </div>
+    </div>
+
+    <!-- ─── HERO ─── -->
+    <section id="about" class="section hero-section">
+      <canvas id="particleCanvas" class="particle-canvas"></canvas>
+      <div class="hero-inner">
+        <div class="hero-tag" data-reveal>
+          <span class="tag-pulse"></span>
+          Open to opportunities · EU Work Authorized · No Sponsorship Required
+        </div>
+        <h1 class="hero-name" data-reveal data-delay="120">
+          Furkan <span class="teal-text">Bodur</span>
+        </h1>
+        <div class="hero-typing" data-reveal data-delay="240">
+          <span id="typeText"></span><span class="cursor"></span>
+        </div>
+        <p class="hero-desc" data-reveal data-delay="360">
+          Senior QA Expert with 8+ years transforming how teams ship software.
+          I’ve tested UAV flight systems and Siemens power-grid software — and now I’m building
+          AI frameworks that auto-generate and run tests from natural language, so engineers can ship faster without sacrificing quality.
+        </p>
+        <div class="hero-btns" data-reveal data-delay="480">
+          <a href="Resume-Furkan-Bodur-EU2.pdf" download class="btn-primary">
+            <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Download CV
+          </a>
+          <a href="#experience" class="btn-ghost">View Experience ↓</a>
+        </div>
+        <div class="hero-metrics" data-reveal data-delay="600">
+          <div class="hm-item">
+            <div class="hm-num" data-count="8" data-suffix="+">0</div>
+            <div class="hm-label">Years in QA</div>
+          </div>
+          <div class="hm-sep"></div>
+          <div class="hm-item">
+            <div class="hm-num no-count">×3</div>
+            <div class="hm-label">ISTQB Advanced</div>
+          </div>
+          <div class="hm-sep"></div>
+          <div class="hm-item">
+            <div class="hm-num no-count">2026</div>
+            <div class="hm-label">Int'l Publication</div>
+          </div>
+          <div class="hm-sep"></div>
+          <div class="hm-item">
+            <div class="hm-num no-count">2</div>
+            <div class="hm-label">Industry Sectors</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ─── EXPERIENCE ─── -->
+    <section id="experience" class="section">
+      <div class="section-head" data-reveal>
+        <span class="s-tag">Career</span>
+        <h2 class="s-title">Experience</h2>
+        <p class="s-sub">From safety-critical aerospace systems to AI-powered testing pipelines.</p>
+      </div>
+
+      <div class="timeline" id="timeline">
+        <div class="tl-track"><div class="tl-line" id="tlLine"></div></div>
+
+        <!-- CURRENT -->
+        <div class="tl-item" data-reveal>
+          <div class="tl-dot tl-dot-active"></div>
+          <div class="tl-content">
+            <div class="tl-period">Feb 2022 — Present</div>
+            <div class="tl-org">Siemens Foundational Technologies</div>
+            <div class="tl-role">Software Development Engineer in Test (SDET)</div>
+            <div class="tl-card">
+              <ul>
+                <li>Engineered context-aware AI agents using LLMs and MCP — <strong>50% increase in automation development speed</strong>.</li>
+                <li>Architected JIRA-Git orchestration layer generating test content from user stories — <strong>80% gain in efficiency</strong>.</li>
+                <li>Built scalable Python frameworks integrating functional, regression and performance testing into CI/CD.</li>
+                <li>Integrated automated tools into Jenkins and GitLab — <strong>20% boost in team productivity</strong>.</li>
+                <li>Conducted API security and RBAC testing for enterprise endpoint security compliance.</li>
+              </ul>
+              <div class="tl-chips">
+                <span>Python</span><span>LLM / MCP</span><span>GitLab CI/CD</span><span>Jenkins</span><span>RAG</span><span>pgvector</span><span>SQL</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- TAI / TUSAS -->
+        <div class="tl-item" data-reveal>
+          <div class="tl-dot"></div>
+          <div class="tl-content">
+            <div class="tl-period">Jun 2017 — Feb 2022</div>
+            <div class="tl-org">Turkish Aerospace Industry (TAI / TUSAŞ)</div>
+            <div class="tl-role">Software Test Engineer &amp; UAV Pilot</div>
+            <div class="tl-card">
+              <!-- UAV SKY ANIMATION -->
+              <div class="uav-scene" id="uavScene">
+                <div class="uav-stars" id="uavStars"></div>
+                <div class="uav-clouds">
+                  <div class="uav-cloud uc1"></div>
+                  <div class="uav-cloud uc2"></div>
+                  <div class="uav-cloud uc3"></div>
+                </div>
+                <div class="uav-plane" id="uavPlane">
+                  <div class="uav-trail"></div>
+                  <svg class="uav-svg" viewBox="0 0 200 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <ellipse cx="110" cy="40" rx="58" ry="9" fill="#0d9488" opacity="0.92"/>
+                    <path d="M168 37 Q198 40 168 43Z" fill="#14b8a6"/>
+                    <path d="M122 38 L98 6 L70 8 L84 38Z" fill="#0d9488" opacity="0.88"/>
+                    <path d="M122 42 L98 74 L70 72 L84 42Z" fill="#0d9488" opacity="0.72"/>
+                    <path d="M55 40 L44 19 L52 26Z" fill="#0d9488" opacity="0.84"/>
+                    <path d="M55 40 L44 61 L52 54Z" fill="#0d9488" opacity="0.84"/>
+                    <ellipse cx="104" cy="40" rx="16" ry="5" fill="#155e75"/>
+                    <ellipse cx="156" cy="38" rx="8" ry="4" fill="#0e7490" opacity="0.7"/>
+                    <rect x="69" y="5" width="3" height="7" rx="1" fill="#14b8a6" opacity="0.6"/>
+                    <rect x="69" y="68" width="3" height="7" rx="1" fill="#14b8a6" opacity="0.6"/>
+                    <circle id="navLightDot" cx="67" cy="8" r="2.5" fill="#22d3ee" opacity="0.9"/>
+                  </svg>
+                </div>
+              </div>
+              <!-- SPLIT ROLES -->
+              <div class="tai-blocks">
+                <div class="tai-block">
+                  <div class="tai-block-head">UAV Pilot &amp; System Software Test <span class="tai-dur">3 yrs</span></div>
+                  <ul>
+                    <li>Operated UAV systems (ANKA platform) in live flight conditions — combining hands-on piloting with software QA.</li>
+                    <li>Developed automated test scripts for flight-critical software under safety-critical quality standards.</li>
+                    <li>Collaborated with flight and dev teams to resolve critical defects before operational deployment.</li>
+                  </ul>
+                </div>
+                <div class="tai-block">
+                  <div class="tai-block-head">ERP System Software Test <span class="tai-dur">2 yrs</span></div>
+                  <ul>
+                    <li>Managed end-to-end QA for enterprise ERP modules, ensuring data integrity and process continuity.</li>
+                    <li>Authored structured test documentation aligned with aerospace compliance requirements.</li>
+                  </ul>
+                </div>
+              </div>
+              <div class="tl-chips">
+                <span>UAV Operations</span><span>Flight Software QA</span><span>ERP Testing</span><span>Safety-Critical</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- EDUCATION -->
+        <div class="tl-item" data-reveal>
+          <div class="tl-dot"></div>
+          <div class="tl-content">
+            <div class="tl-period">Aug 2013 — Jun 2017</div>
+            <div class="tl-org">Gazi University</div>
+            <div class="tl-role">B.Sc. Computer Engineering</div>
+            <div class="tl-card">
+              <p class="tl-plain-text">Computer Engineering graduate — strong foundations in software systems, algorithms and data structures, building the technical bedrock for a career in quality engineering.</p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ─── CAREER MAP ─── -->
+    <section id="careermap" class="section">
+      <div class="section-head" data-reveal>
+        <span class="s-tag">Journey</span>
+        <h2 class="s-title">Career Map</h2>
+        <p class="s-sub">Two industries, one thread — always solving complex problems through quality engineering.</p>
+      </div>
+
+      <div class="career-map" data-reveal>
+        <!-- Track -->
+        <div class="cm-track">
+          <div class="cm-fill" id="cmFill"></div>
+        </div>
+
+        <!-- Milestones -->
+        <div class="cm-milestones">
+
+          <div class="cm-milestone" data-cm-delay="0">
+            <div class="cm-dot cm-dot-first"></div>
+            <div class="cm-year">2013</div>
+            <div class="cm-card">
+              <div class="cm-icon">🎓</div>
+              <div class="cm-label">Gazi University</div>
+              <div class="cm-sublabel">B.Sc. Computer Engineering</div>
+            </div>
+          </div>
+
+          <div class="cm-milestone" data-cm-delay="200">
+            <div class="cm-dot"></div>
+            <div class="cm-year">2017</div>
+            <div class="cm-card">
+              <div class="cm-icon">🏭</div>
+              <div class="cm-label">TAI / TUSAŞ</div>
+              <div class="cm-sublabel">ERP Systems QA</div>
+            </div>
+          </div>
+
+          <div class="cm-milestone" data-cm-delay="400">
+            <div class="cm-dot"></div>
+            <div class="cm-year">2019</div>
+            <div class="cm-card">
+              <div class="cm-icon">✈️</div>
+              <div class="cm-label">TAI / TUSAŞ</div>
+              <div class="cm-sublabel">UAV Pilot + Software QA</div>
+            </div>
+          </div>
+
+          <div class="cm-milestone" data-cm-delay="600">
+            <div class="cm-dot"></div>
+            <div class="cm-year">2022</div>
+            <div class="cm-card">
+              <div class="cm-icon">⚡</div>
+              <div class="cm-label">Siemens</div>
+              <div class="cm-sublabel">SDET · AI Pipelines</div>
+            </div>
+          </div>
+
+          <div class="cm-milestone" data-cm-delay="800">
+            <div class="cm-dot cm-dot-active"></div>
+            <div class="cm-year">2026</div>
+            <div class="cm-card cm-card-now">
+              <div class="cm-icon">🚀</div>
+              <div class="cm-label">Now</div>
+              <div class="cm-sublabel">AI-First · Open to EU</div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ─── AI PIPELINE ─── -->
+    <section id="pipeline" class="section">
+      <div class="section-head" data-reveal>
+        <span class="s-tag">Engineering</span>
+        <h2 class="s-title">AI Orchestration Pipeline</h2>
+        <p class="s-sub">A multi-agent system that turns code commits into Jira-ready test cases — no human in the loop.</p>
+      </div>
+
+      <div class="pipeline-wrap" data-reveal>
+        <div class="pipe-row" id="pipeRow">
+
+          <div class="pipe-node" id="pn0">
+            <div class="pn-glow"></div>
+            <div class="pn-icon">🔍</div>
+            <div class="pn-name">Commit<br>Analyzer</div>
+            <div class="pn-sub">MCP GitLab</div>
+          </div>
+
+          <div class="pipe-connector">
+            <svg viewBox="0 0 100 16" preserveAspectRatio="none" class="pipe-svg">
+              <path d="M2 8 L98 8" class="pipe-path" stroke-dasharray="6 3"/>
+              <circle r="3.5" fill="var(--teal-light)" opacity="0.9">
+                <animateMotion dur="1.4s" repeatCount="indefinite" path="M2 8 L98 8"/>
+              </circle>
+            </svg>
+          </div>
+
+          <div class="pipe-node" id="pn1">
+            <div class="pn-glow"></div>
+            <div class="pn-icon">🧩</div>
+            <div class="pn-name">Gap<br>Analyzer</div>
+            <div class="pn-sub">Coverage</div>
+          </div>
+
+          <div class="pipe-connector">
+            <svg viewBox="0 0 100 16" preserveAspectRatio="none" class="pipe-svg">
+              <path d="M2 8 L98 8" class="pipe-path" stroke-dasharray="6 3"/>
+              <circle r="3.5" fill="var(--teal-light)" opacity="0.9">
+                <animateMotion dur="1.4s" begin="0.47s" repeatCount="indefinite" path="M2 8 L98 8"/>
+              </circle>
+            </svg>
+          </div>
+
+          <div class="pipe-node" id="pn2">
+            <div class="pn-glow"></div>
+            <div class="pn-icon">⚡</div>
+            <div class="pn-name">Test<br>Generator</div>
+            <div class="pn-sub">Multi-LLM</div>
+          </div>
+
+          <div class="pipe-connector">
+            <svg viewBox="0 0 100 16" preserveAspectRatio="none" class="pipe-svg">
+              <path d="M2 8 L98 8" class="pipe-path" stroke-dasharray="6 3"/>
+              <circle r="3.5" fill="var(--teal-light)" opacity="0.9">
+                <animateMotion dur="1.4s" begin="0.93s" repeatCount="indefinite" path="M2 8 L98 8"/>
+              </circle>
+            </svg>
+          </div>
+
+          <div class="pipe-node" id="pn3">
+            <div class="pn-glow"></div>
+            <div class="pn-icon">📤</div>
+            <div class="pn-name">Jira<br>Uploader</div>
+            <div class="pn-sub">Xray API</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- IMPACT CARDS -->
+      <div class="impact-row">
+        <div class="imp-card" data-reveal data-delay="0">
+          <div class="imp-num" data-count="80" data-suffix="%">0%</div>
+          <div class="imp-title">Efficiency Gain</div>
+          <div class="imp-sub">JIRA-Git orchestration eliminated documentation debt</div>
+        </div>
+        <div class="imp-card" data-reveal data-delay="100">
+          <div class="imp-num" data-count="50" data-suffix="%">0%</div>
+          <div class="imp-title">Automation Speed</div>
+          <div class="imp-sub">Half the time from story to production-ready tests</div>
+        </div>
+        <div class="imp-card" data-reveal data-delay="200">
+          <div class="imp-num" data-count="90" data-suffix="%">0%</div>
+          <div class="imp-title">Cost Reduction</div>
+          <div class="imp-sub">Local LLM API vs cloud token spend per sprint</div>
+        </div>
+        <div class="imp-card" data-reveal data-delay="300">
+          <div class="imp-num" data-count="20" data-suffix="%">0%</div>
+          <div class="imp-title">Team Productivity</div>
+          <div class="imp-sub">CI/CD integration with Jenkins &amp; GitLab</div>
+        </div>
+      </div>
+
+      <div class="tech-tags" data-reveal>
+        <span>MCP Protocol</span><span>LLM API Integration</span><span>RAG / pgvector</span>
+        <span>GitLab MCP</span><span>Jira / Xray API</span><span>Multi-Agent Handoffs</span>
+        <span>Python</span><span>Docker</span>
+      </div>
+
+      <!-- TERMINAL DEMO -->
+      <div class="terminal-demo" data-reveal>
+        <div class="term-topbar">
+          <span class="term-dot td-red"></span>
+          <span class="term-dot td-yellow"></span>
+          <span class="term-dot td-green"></span>
+          <span class="term-title">pipeline — bash</span>
+          <button class="term-run-btn" id="termRunBtn">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><polygon points="5,3 19,12 5,21"/></svg>
+            Run Demo
+          </button>
+        </div>
+        <div class="term-body" id="termBody">
+          <div class="term-line term-prompt">$ <span class="term-cmd">analyze-commits --story STORY-1234</span></div>
+          <div class="term-hint">Press "Run Demo" to simulate the pipeline ↑</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ─── SIGNATURE PROJECT ─── -->
+    <section id="project" class="section">
+      <div class="section-head" data-reveal>
+        <span class="s-tag">Signature Project</span>
+        <h2 class="s-title">AI-Driven Test Automation</h2>
+        <p class="s-sub">Building the bridge between natural language requirements and production-ready test code — automatically, at deployment time.</p>
+      </div>
+
+      <!-- 3-STEP FLOW -->
+      <div class="proj-flow" data-reveal>
+        <div class="pf-step">
+          <div class="pf-icon-wrap"><span class="pf-icon">📝</span></div>
+          <div class="pf-label">Natural Language</div>
+          <div class="pf-desc">User stories, manual tests and scripts seed a growing semantic knowledge base.</div>
+        </div>
+        <div class="pf-arrow">
+          <svg viewBox="0 0 80 24" fill="none">
+            <path d="M2 12 L78 12" stroke="var(--teal)" stroke-width="2" stroke-dasharray="5 3"/>
+            <polyline points="70,5 78,12 70,19" stroke="var(--teal-light)" stroke-width="2" fill="none"/>
+            <circle r="3" fill="var(--teal-light)">
+              <animateMotion dur="2s" repeatCount="indefinite" path="M2 12 L76 12"/>
+            </circle>
+          </svg>
+        </div>
+        <div class="pf-step">
+          <div class="pf-icon-wrap"><span class="pf-icon">🧠</span></div>
+          <div class="pf-label">AI Engine</div>
+          <div class="pf-desc">Semantic retrieval finds relevant patterns; LLM generates accurate test code.</div>
+        </div>
+        <div class="pf-arrow">
+          <svg viewBox="0 0 80 24" fill="none">
+            <path d="M2 12 L78 12" stroke="var(--teal)" stroke-width="2" stroke-dasharray="5 3"/>
+            <polyline points="70,5 78,12 70,19" stroke="var(--teal-light)" stroke-width="2" fill="none"/>
+            <circle r="3" fill="var(--teal-light)">
+              <animateMotion dur="2s" begin="0.67s" repeatCount="indefinite" path="M2 12 L76 12"/>
+            </circle>
+          </svg>
+        </div>
+        <div class="pf-step">
+          <div class="pf-icon-wrap"><span class="pf-icon">✅</span></div>
+          <div class="pf-label">Automated Tests</div>
+          <div class="pf-desc">Runnable Playwright tests linked to Jira and reported to the team — zero effort.</div>
+        </div>
+      </div>
+
+      <!-- FEATURE CARDS -->
+      <div class="proj-features" data-reveal>
+        <div class="feat-item">
+          <div class="feat-icon">🚀</div>
+          <div>
+            <div class="feat-title">Deployment-Triggered</div>
+            <div class="feat-sub">New releases automatically kick off test generation and execution.</div>
+          </div>
+        </div>
+        <div class="feat-item">
+          <div class="feat-icon">🔗</div>
+          <div>
+            <div class="feat-title">Teams &amp; Jira Integration</div>
+            <div class="feat-sub">Results surface as Jira test cases and MS Teams notifications.</div>
+          </div>
+        </div>
+        <div class="feat-item">
+          <div class="feat-icon">📚</div>
+          <div>
+            <div class="feat-title">Self-Updating Knowledge</div>
+            <div class="feat-sub">A semantic index that grows smarter with every sprint.</div>
+          </div>
+        </div>
+        <div class="feat-item">
+          <div class="feat-icon">🎯</div>
+          <div>
+            <div class="feat-title">Validated Accuracy</div>
+            <div class="feat-sub">Retrieval quality benchmarked on real-world production test data.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- TEAMS ↔ N8N DEMO -->
+      <div class="fb-demo" data-reveal>
+
+        <!-- TRIGGER PANE -->
+        <div class="fb-trigger-pane" id="projTrigger">
+          <div class="fbt-channel">
+            <span class="fbt-ms-icon">⊞</span>
+            <span class="fbt-channel-text">Microsoft Teams · #automation-team</span>
+          </div>
+          <div class="fbt-compose">
+            <div class="fbt-avatar">AK</div>
+            <div class="fbt-bubble">
+              <span class="fbt-mention">@FINALBOSS</span> run tests for new login flow (STORY-5678)
+            </div>
+          </div>
+          <button class="fb-send-btn" id="projRunBtn">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+            Send message in Teams to trigger
+          </button>
+        </div>
+
+        <!-- WORKFLOW PANE -->
+        <div class="fb-workflow-pane" id="projWorkflow">
+          <div class="fbw-header">
+            <span class="fbw-n8n-badge">⚡ n8n</span>
+            <span class="fbw-wf-title">FINALBOSS workflow triggered</span>
+            <span class="fbw-story-tag">STORY-5678</span>
+          </div>
+          <div class="fbw-steps" id="projSteps">
+            <div class="fbw-step"><span class="fbw-si"></span><div class="fbw-sinfo"><span class="fbw-slabel">Webhook received</span><span class="fbw-sdetail">n8n · MS Teams connector</span></div></div>
+            <div class="fbw-step"><span class="fbw-si"></span><div class="fbw-sinfo"><span class="fbw-slabel">Intent Classification</span><span class="fbw-sdetail">GENERATE_AND_RUN · 0.97 confidence</span></div></div>
+            <div class="fbw-step"><span class="fbw-si"></span><div class="fbw-sinfo"><span class="fbw-slabel">Knowledge Retrieval</span><span class="fbw-sdetail">3 sources found in pgvector (95 / 87 / 81%)</span></div></div>
+            <div class="fbw-step"><span class="fbw-si"></span><div class="fbw-sinfo"><span class="fbw-slabel">Test Generation</span><span class="fbw-sdetail">3 Playwright tests generated via RAG context</span></div></div>
+            <div class="fbw-step"><span class="fbw-si"></span><div class="fbw-sinfo"><span class="fbw-slabel">pytest Execution</span><span class="fbw-sdetail">3 passed · 0 failed · 4.9 s</span></div></div>
+            <div class="fbw-step"><span class="fbw-si"></span><div class="fbw-sinfo"><span class="fbw-slabel">Jira / Xray Upload</span><span class="fbw-sdetail">XPGSGR-9101 · XPGSGR-9102 · XPGSGR-9103</span></div></div>
+            <div class="fbw-step"><span class="fbw-si"></span><div class="fbw-sinfo"><span class="fbw-slabel">Teams Notification</span><span class="fbw-sdetail">Result card posted to #automation-team</span></div></div>
+          </div>
+          <div class="fbw-result" id="projResult">
+            <div class="ttr-header">
+              <span class="ttr-bot">🤖 FINALBOSS</span>
+              <span class="ttr-badge">Teams Bot</span>
+            </div>
+            <div class="ttr-title">✅ Tests Completed — STORY-5678</div>
+            <div class="ttr-stats">
+              <div class="ttr-stat"><span class="ttr-n">3</span> passed</div>
+              <div class="ttr-stat"><span class="ttr-n">0</span> failed</div>
+              <div class="ttr-stat"><span class="ttr-n">4.9 s</span> duration</div>
+            </div>
+            <div class="ttr-links">
+              <a class="ttr-link" href="#" onclick="return false;">📎 STORY-5678 Jira</a>
+              <a class="ttr-link" href="#" onclick="return false;">📄 test_login_sso_flow.py</a>
+              <a class="ttr-link" href="#" onclick="return false;">📊 Xray Execution</a>
+            </div>
+          </div>
+          <button class="fb-again-btn" id="projAgainBtn" style="display:none">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-4.17"/></svg>
+            Run Again
+          </button>
+        </div>
+
+      </div>
+
+      <!-- PUBLICATION -->
+      <div class="pub-card" data-reveal>
+        <div class="pub-badge">📄 Accepted Publication · Prague 2026</div>
+        <div class="pub-title">"Bridging the Gap: An Agentic AI Framework for Reverse-Engineering Automated Test Scripts into Natural Language Requirements"</div>
+        <div class="pub-venue">4th Cognitive Models and Artificial Intelligence Conference — Comparative analysis of 3 LLM models over 300+ industrial Python automation scripts.</div>        <div class="pub-link-row">
+          <a class="pub-doi-link pub-doi-soon" href="#" onclick="return false;">DOI / Proceedings link coming soon</a>
+        </div>      </div>
+    </section>
+
+    <!-- ─── SKILLS ─── -->
+    <section id="skills" class="section">
+      <div class="section-head" data-reveal>
+        <span class="s-tag">Expertise</span>
+        <h2 class="s-title">Skills</h2>
+      </div>
+      <div class="skills-grid">
+        <div class="skill-cat" data-reveal data-delay="0">
+          <div class="sc-title">AI &amp; Modern QA</div>
+          <div class="sc-tags">
+            <span>AI Agent Orchestration</span><span>LLM Integration</span><span>MCP Protocol</span>
+            <span>Prompt Engineering</span><span>RAG</span><span>Vector Databases</span><span>Automated Documentation</span>
+          </div>
+        </div>
+        <div class="skill-cat" data-reveal data-delay="100">
+          <div class="sc-title">Test Automation</div>
+          <div class="sc-tags">
+            <span>Python</span><span>Playwright</span><span>Selenium</span><span>TestComplete</span>
+            <span>Postman</span><span>SoapUI</span><span>JMeter</span><span>BDD / Gherkin</span>
+          </div>
+        </div>
+        <div class="skill-cat" data-reveal data-delay="200">
+          <div class="sc-title">DevOps &amp; Infrastructure</div>
+          <div class="sc-tags">
+            <span>Jenkins</span><span>GitLab CI/CD</span><span>Docker</span>
+            <span>SQL</span><span>Jira API</span><span>AWS Basics</span><span>Linux</span>
+          </div>
+        </div>
+        <div class="skill-cat" data-reveal data-delay="300">
+          <div class="sc-title">Domain Knowledge</div>
+          <div class="sc-tags">
+            <span>UAV Systems</span><span>Aerospace QA</span><span>Safety-Critical Testing</span>
+            <span>RBAC / Security Testing</span><span>ERP Systems</span><span>Performance Testing</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- RADAR CHART -->
+      <div class="radar-wrap" data-reveal>
+        <div class="radar-title">Skill Profile</div>
+        <svg id="radarSvg" viewBox="0 0 300 300" class="radar-svg" aria-label="Skill radar chart">
+          <!-- grid polygons drawn by JS -->
+          <g id="radarGrid"></g>
+          <!-- filled area drawn by JS -->
+          <polygon id="radarArea" class="radar-area"/>
+          <!-- axes drawn by JS -->
+          <g id="radarAxes"></g>
+          <!-- labels drawn by JS -->
+          <g id="radarLabels"></g>
+        </svg>
+      </div>
+    </section>
+
+    <footer class="site-footer">
+      <p>© 2026 Furkan Bodur · Built with care, no frameworks.</p>
+    </footer>
+
+  </main>
+
+  <!-- KEYBOARD NAV HINT -->
+  <div class="kb-hint" id="kbHint">
+    <kbd>↑</kbd><kbd>↓</kbd> navigate sections
+  </div>
+
+  <!-- COPY TOAST -->
+  <div class="copy-toast" id="copyToast">📋 Email copied!</div>
+
+  <!-- SCROLL TO TOP -->
+  <button class="scroll-top-btn" id="scrollTopBtn" aria-label="Scroll to top">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="18 15 12 9 6 15"/></svg>
+  </button>
+
+  <script src="main.js"></script>
+</body>
+</html>
