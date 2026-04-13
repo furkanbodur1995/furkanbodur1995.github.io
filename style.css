@@ -1771,25 +1771,43 @@ kbd {
   100% { opacity: 0; transform: translate(-50%, -50%) translateY(-30px); }
 }
 
-/* Counter panel */
+/* Counter panel — inside tr-panel */
 .bc-counter {
-  position: fixed; bottom: 18px; left: 18px;
-  display: flex; align-items: center; gap: .55rem;
-  background: var(--bg3); border: 1px solid var(--teal-border);
-  border-radius: 12px; padding: .55rem .9rem;
+  display: flex; align-items: center; gap: .45rem;
+  background: var(--teal-dim); border-top: 1px solid var(--teal-border);
+  border-radius: 0 0 12px 12px;
+  padding: .45rem .7rem;
   font-family: 'JetBrains Mono', monospace;
-  font-size: .82rem; color: var(--txt);
-  z-index: 9990; pointer-events: auto;
-  box-shadow: 0 4px 20px rgba(0,0,0,.35), 0 0 0 1px rgba(20,184,166,.1);
+  font-size: .72rem; color: var(--txt);
   transition: transform .2s;
-  backdrop-filter: blur(8px);
 }
-.bc-counter-bump { transform: scale(1.08); }
-.bc-counter-icon { font-size: 1rem; }
+.bc-counter-bump { transform: scale(1.05); }
+.bc-counter-icon { font-size: .85rem; }
 .bc-counter-num  { font-weight: 800; color: var(--teal-light); min-width: 2ch; }
 .bc-counter-title {
-  font-size: .62rem; color: var(--txt3); font-weight: 500;
-  border-left: 1px solid var(--border); padding-left: .5rem; margin-left: .15rem;
+  font-size: .56rem; color: var(--txt3); font-weight: 500;
+  border-left: 1px solid var(--border); padding-left: .4rem; margin-left: .1rem;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+
+/* Level up notification */
+.bc-levelup {
+  position: absolute; pointer-events: none; z-index: 12;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: .75rem; font-weight: 800; line-height: 1;
+  color: #facc15; white-space: nowrap;
+  background: rgba(0,0,0,.8); border: 1px solid rgba(250,204,21,.4);
+  padding: 5px 12px; border-radius: 8px;
+  transform: translate(-50%, -50%);
+  animation: levelUpFloat 2s ease-out forwards;
+  text-shadow: 0 0 8px rgba(250,204,21,.6);
+}
+@keyframes levelUpFloat {
+  0%   { opacity: 0; transform: translate(-50%, -50%) scale(.6); }
+  12%  { opacity: 1; transform: translate(-50%, -50%) scale(1.15); }
+  25%  { transform: translate(-50%, -50%) scale(1); }
+  75%  { opacity: 1; transform: translate(-50%, -70%) scale(1); }
+  100% { opacity: 0; transform: translate(-50%, -90%); }
 }
 
 /* Hide counter on mobile (game doesn't run there) */

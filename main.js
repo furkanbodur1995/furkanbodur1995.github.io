@@ -1333,7 +1333,13 @@ Best,
   const counter = document.createElement('div');
   counter.className = 'bc-counter';
   counter.innerHTML = '<span class="bc-counter-icon">🪲</span><span class="bc-counter-num">×0</span><span class="bc-counter-title">Junior Bug Squasher</span>';
-  document.body.appendChild(counter);
+  // Append inside test run panel, after tr-time
+  const trPanel = document.getElementById('testRunPanel');
+  if (trPanel) {
+    trPanel.appendChild(counter);
+  } else {
+    document.body.appendChild(counter);
+  }
 
   /* ── helpers ── */
   function rand(a, b) { return a + Math.random() * (b - a); }
@@ -1432,10 +1438,22 @@ Best,
   }
 
   function updateCounter() {
+    const prevTitle = counter.querySelector('.bc-counter-title').textContent;
     counter.querySelector('.bc-counter-num').textContent = `×${caught}`;
-    counter.querySelector('.bc-counter-title').textContent = getTitle();
+    const newTitle = getTitle();
+    counter.querySelector('.bc-counter-title').textContent = newTitle;
     counter.classList.add('bc-counter-bump');
     setTimeout(() => counter.classList.remove('bc-counter-bump'), 300);
+
+    // Level up flash
+    if (newTitle !== prevTitle && caught > 0) {
+      const lvl = document.createElement('div');
+      lvl.className = 'bc-levelup';
+      lvl.innerHTML = `⬆ ${newTitle}`;
+      lvl.style.cssText = `left:${charX}px;top:${charY - 35}px;`;
+      container.appendChild(lvl);
+      setTimeout(() => lvl.remove(), 2200);
+    }
   }
 
   /* ── game loop ── */
@@ -1443,14 +1461,25 @@ Best,
     const W = window.innerWidth;
     const H = window.innerHeight;
 
-    // move bugs (wander)
+    // move bugs (wander + flee from character)
     for (const b of bugs) {
       b.wobble += 0.03;
       b.vx += Math.sin(b.wobble) * 0.04;
       b.vy += Math.cos(b.wobble * 0.7) * 0.04;
+
+      // flee: if character is nearby, run away
+      const fdx = b.x - charX;
+      const fdy = b.y - charY;
+      const fdist = Math.sqrt(fdx * fdx + fdy * fdy);
+      if (fdist < 120 && fdist > 0) {
+        const fleeFactor = 0.15 * (1 - fdist / 120);
+        b.vx += (fdx / fdist) * fleeFactor;
+        b.vy += (fdy / fdist) * fleeFactor;
+      }
+
       // clamp speed
       const spd = Math.sqrt(b.vx * b.vx + b.vy * b.vy);
-      if (spd > BUG_SPEED * 1.5) { b.vx *= 0.95; b.vy *= 0.95; }
+      if (spd > BUG_SPEED * 2) { b.vx *= 0.93; b.vy *= 0.93; }
       // keep in bounds (hard clamp + bounce)
       const PAD = 40;
       if (b.x < PAD)     { b.x = PAD;     b.vx = Math.abs(b.vx) * 0.5 + 0.2; }
