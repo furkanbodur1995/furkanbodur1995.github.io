@@ -1205,3 +1205,72 @@ kbd {
   .impact-row { grid-template-columns: 1fr 1fr; }
   .proj-features { grid-template-columns: 1fr; }
 }
+
+/* ─── TEST RUN PANEL ─── */
+.tr-panel {
+  position: fixed;
+  top: 50%;
+  right: 0;
+  transform: translateY(-50%) translateX(calc(100% - 10px));
+  width: 192px;
+  background: var(--bg3);
+  border: 1px solid var(--teal-border);
+  border-right: none;
+  border-radius: 10px 0 0 10px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: .72rem;
+  z-index: 90;
+  opacity: 0;
+  transition: transform .4s cubic-bezier(.34,1.2,.64,1), opacity .3s;
+  box-shadow: -4px 0 24px rgba(0,0,0,.25);
+  overflow: hidden;
+}
+.tr-panel.visible {
+  opacity: 1;
+  transform: translateY(-50%) translateX(0);
+}
+.tr-header {
+  display: flex; align-items: center; gap: .45rem;
+  padding: .55rem .75rem;
+  background: var(--bg2);
+  border-bottom: 1px solid var(--border);
+}
+.tr-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+.tr-dot-green { background: #27c93f; box-shadow: 0 0 6px #27c93f; }
+.tr-title { color: var(--txt3); font-size: .68rem; }
+.tr-list { list-style: none; margin: 0; padding: .4rem 0; }
+.tr-item {
+  display: flex; align-items: center; gap: .5rem;
+  padding: .28rem .75rem;
+  transition: background .15s;
+}
+.tr-item:hover { background: rgba(20,184,166,.06); }
+.tr-name { color: var(--txt2); white-space: nowrap; }
+.tr-item[data-state="pass"] .tr-name { color: var(--teal-light); }
+.tr-item[data-state="running"] .tr-name { color: #facc15; }
+.tr-status {
+  width: 14px; height: 14px; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+}
+.tr-status[data-status="pending"]::before {
+  content: '○'; color: var(--txt3); font-size: .75rem;
+}
+.tr-status[data-status="running"]::before {
+  content: '◉'; color: #facc15; font-size: .75rem;
+  display: inline-block;
+  animation: trSpin .7s linear infinite;
+}
+.tr-status[data-status="pass"]::before {
+  content: '✓'; color: #27c93f; font-size: .82rem; font-weight: 700;
+}
+@keyframes trSpin {
+  0%   { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+.tr-footer {
+  padding: .45rem .75rem;
+  border-top: 1px solid var(--border);
+  color: var(--txt3); font-size: .68rem; text-align: right;
+}
+#trPassed { color: #27c93f; font-weight: 700; }
+@media (max-width: 820px) { .tr-panel { display: none; } }

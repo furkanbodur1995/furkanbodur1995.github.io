@@ -936,3 +936,54 @@ if (tlLine && tlSection) {
   }, { threshold: 0.3 });
   obs.observe(svgEl);
 })();
+
+
+/* ────────────────────────────────────────
+   24. TEST RUN PANEL (scroll checklist)
+──────────────────────────────────────── */
+(function initTestRunPanel() {
+  const panel    = document.getElementById('testRunPanel');
+  const passedEl = document.getElementById('trPassed');
+  if (!panel) return;
+
+  const ORDER      = ['about','experience','careermap','pipeline','project','skills'];
+  const PASS_DELAY = 520;
+  let passed = 0;
+
+  let panelShown = false;
+  window.addEventListener('scroll', () => {
+    if (!panelShown && window.scrollY > 60) {
+      panelShown = true;
+      panel.classList.add('visible');
+    }
+  }, { passive: true });
+
+  function getItem(id) {
+    return panel.querySelector(`.tr-item[data-tr-section="${id}"]`);
+  }
+  function setStatus(item, status) {
+    item.querySelector('.tr-status').setAttribute('data-status', status);
+    item.setAttribute('data-state', status);
+  }
+
+  const sectionObs = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      const item = getItem(entry.target.id);
+      if (!item) return;
+      const already = item.querySelector('.tr-status').getAttribute('data-status') === 'pass';
+      if (entry.isIntersecting && !already) {
+        setStatus(item, 'running');
+        setTimeout(() => {
+          setStatus(item, 'pass');
+          passed++;
+          passedEl.textContent = passed;
+        }, PASS_DELAY);
+      }
+    });
+  }, { rootMargin: '-20% 0px -20% 0px', threshold: 0 });
+
+  ORDER.forEach(id => {
+    const el = document.getElementById(id);
+    if (el) sectionObs.observe(el);
+  });
+})();
