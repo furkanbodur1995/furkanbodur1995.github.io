@@ -5,6 +5,8 @@
 
 'use strict';
 
+const _PAGE_START = Date.now();
+
 /* ────────────────────────────────────────
    1. THEME TOGGLE
 ──────────────────────────────────────── */
@@ -1065,8 +1067,9 @@ if (tlLine && tlSection) {
   }
 
   function openHireMail() {
-    const to      = 'furkan.bodur@gmail.com';
+    const to      = 'furkan.bodur1995@gmail.com';
     const subject = encodeURIComponent('RE: Your hire_criteria.py — all tests passed ✅');
+    const elapsed = ((Date.now() - _PAGE_START) / 1000).toFixed(2);
     const body    = encodeURIComponent(
 `Hi Furkan,
 
@@ -1079,7 +1082,7 @@ PASSED  test_ai_pipeline
 PASSED  test_project
 PASSED  test_skills
 
-6 passed in <time_spent>s — no warnings, no regressions.
+6 passed in ${elapsed}s — no warnings, no regressions.
 
 Based on these results, I'd like to move forward with an interview.
 
@@ -1100,7 +1103,7 @@ Best,
   const timeEl = document.getElementById('trTime');
   if (!timeEl) return;
 
-  const start = Date.now();
+  const start = _PAGE_START;
   let shown = false;
 
   function fmt(ms) {
