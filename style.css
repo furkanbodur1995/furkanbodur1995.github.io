@@ -923,10 +923,20 @@ kbd {
   font-size: .72rem; font-weight: 600; cursor: pointer;
   font-family: 'JetBrains Mono', monospace;
   transition: background .2s, transform .1s;
+  animation: runBtnPulse 2.2s ease infinite;
 }
-.term-run-btn:hover { background: var(--teal-light); }
+@keyframes runBtnPulse {
+  0%   { box-shadow: 0 0 0 0 rgba(20,184,166,.55); }
+  60%  { box-shadow: 0 0 0 7px rgba(20,184,166,0); }
+  100% { box-shadow: 0 0 0 0 rgba(20,184,166,0); }
+}
+.term-run-hint {
+  font-size: .66rem; font-weight: 400; opacity: .7;
+  animation: hintBlink 1.4s step-end infinite;
+}
+.term-run-btn:hover { background: var(--teal-light); animation: none; }
 .term-run-btn:active { transform: scale(.96); }
-.term-run-btn:disabled { opacity: .5; cursor: default; }
+.term-run-btn:disabled { opacity: .5; cursor: default; animation: none; }
 
 .term-body {
   padding: 1rem 1.25rem; min-height: 180px;

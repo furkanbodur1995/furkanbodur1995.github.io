@@ -1073,7 +1073,10 @@ if (tlLine && tlSection) {
   function openHireMail() {
     const to      = 'furkan.bodur1995@gmail.com';
     const subject = encodeURIComponent('RE: Your hire_criteria.py — all tests passed ✅');
-    const elapsed = ((Date.now() - _PAGE_START) / 1000).toFixed(2);
+    const _elapsedSec = Math.floor((Date.now() - _PAGE_START) / 1000);
+    const _m = Math.floor(_elapsedSec / 60);
+    const _s = _elapsedSec % 60;
+    const elapsed = _m > 0 ? `${_m}m ${String(_s).padStart(2,'0')}s` : `${_s}s`;
     const body    = encodeURIComponent(
 `Hi Furkan,
 
