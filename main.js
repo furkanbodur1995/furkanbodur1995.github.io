@@ -711,6 +711,151 @@ if (tlLine && tlSection) {
 
 
 /* ────────────────────────────────────────
+   20. CONSOLE EASTER EGG
+──────────────────────────────────────── */
+(function consoleEasterEgg() {
+  const s1 = 'color:#14b8a6;font-size:14px;font-weight:900;font-family:monospace';
+  const s2 = 'color:#94a3b8;font-size:11px;font-family:monospace';
+  const s3 = 'color:#0d9488;font-size:11px;font-weight:700;font-family:monospace';
+  console.log('%c🔍 Inspect element?\n', s1);
+  console.log('%cFinding bugs here is gonna be tough.\nThis page was built by someone who does this for a living.\n', s2);
+  console.log('%c✓ Navigation tested\n✓ Animations tested\n✓ Responsive layout tested\n✓ Theme switching tested\n✓ Console messages tested  ← you found this one\n', s3);
+  console.log('%c→ If you want a QA engineer who goes this deep: furkan.bodur1995@gmail.com\n', s2);
+})();
+
+
+/* ────────────────────────────────────────
+   21. QA MODE TOGGLE
+──────────────────────────────────────── */
+(function initQAMode() {
+  const btn = document.getElementById('qaModeBtn');
+  if (!btn) return;
+  let badge = null;
+
+  btn.addEventListener('click', () => {
+    const active = document.body.classList.toggle('qa-mode');
+    btn.classList.toggle('qa-active', active);
+
+    if (active) {
+      // count interactive elements
+      const count = document.querySelectorAll('a,button,input,select,textarea').length;
+      badge = document.createElement('div');
+      badge.className = 'qa-badge-count';
+      badge.id = 'qaBadge';
+      badge.textContent = `${count} elements · 0 bugs found`;
+      document.body.appendChild(badge);
+      // small typewriter reveal
+      const msgs = [`${count} elements · 0 bugs found`, `${count} elements · scanning...`, `${count} elements · 0 bugs found ✓`];
+      let mi = 0;
+      const t = setInterval(() => { if (badge) badge.textContent = msgs[++mi]; if (mi >= msgs.length - 1) clearInterval(t); }, 600);
+    } else {
+      badge && badge.remove(); badge = null;
+    }
+  });
+})();
+
+
+/* ────────────────────────────────────────
+   22. COPY SHAREABLE LINK
+──────────────────────────────────────── */
+(function initShareLink() {
+  const btn   = document.getElementById('copyShareBtn');
+  const label = document.getElementById('shareLabel');
+  const toast = document.getElementById('shareToast');
+  if (!btn) return;
+
+  btn.addEventListener('click', async () => {
+    const url = 'https://furkanbodur1995.github.io';
+    try { await navigator.clipboard.writeText(url); }
+    catch { const ta = Object.assign(document.createElement('textarea'), { value: url, style: 'position:fixed;opacity:0' }); document.body.appendChild(ta); ta.select(); document.execCommand('copy'); ta.remove(); }
+
+    label.textContent = 'Copied!';
+    toast.classList.add('show');
+    setTimeout(() => { toast.classList.remove('show'); label.textContent = 'Share link'; }, 2500);
+  });
+})();
+
+
+/* ────────────────────────────────────────
+   23. RUN TESTS ON THIS PAGE
+──────────────────────────────────────── */
+(function initRunTests() {
+  const btn     = document.getElementById('runTestsBtn');
+  const overlay = document.getElementById('rtOverlay');
+  const closeBtn= document.getElementById('rtClose');
+  const body    = document.getElementById('rtBody');
+  if (!btn || !overlay) return;
+
+  const navLinks = document.querySelectorAll('.sb-nav-link').length;
+  const sections = document.querySelectorAll('section').length;
+  const buttons  = document.querySelectorAll('button').length;
+  const cvDownloadClicked = false; // tracked below
+
+  const TESTS = [
+    { delay: 0,    cls: 'dim',     text: 'pytest test_portfolio_page.py -v --tb=short' },
+    { delay: 300,  cls: 'dim',     text: '' },
+    { delay: 600,  cls: 'info',    text: `collecting ${sections * 3 + buttons} test items...` },
+    { delay: 1100, cls: 'success', text: `PASSED  test_navigation_links_present[${navLinks} links]` },
+    { delay: 1500, cls: 'success', text: `PASSED  test_hero_section_visible` },
+    { delay: 1850, cls: 'success', text: `PASSED  test_profile_photo_loaded` },
+    { delay: 2150, cls: 'success', text: `PASSED  test_typing_animation_running` },
+    { delay: 2450, cls: 'success', text: `PASSED  test_particle_canvas_initialized` },
+    { delay: 2750, cls: 'success', text: `PASSED  test_career_map_milestones[5 items]` },
+    { delay: 3050, cls: 'success', text: `PASSED  test_istqb_certifications_displayed[3 certs]` },
+    { delay: 3350, cls: 'success', text: `PASSED  test_dark_light_mono_theme_toggle` },
+    { delay: 3650, cls: 'success', text: `PASSED  test_terminal_demo_runs` },
+    { delay: 3950, cls: 'success', text: `PASSED  test_teams_workflow_demo_interactive` },
+    { delay: 4250, cls: 'success', text: `PASSED  test_radar_chart_renders[6 axes]` },
+    { delay: 4550, cls: 'success', text: `PASSED  test_scroll_progress_bar` },
+    { delay: 4850, cls: 'success', text: `PASSED  test_mobile_responsive_layout` },
+    { delay: 5150, cls: 'success', text: `PASSED  test_cv_download_link_present` },
+    { delay: 5450, cls: 'warn',    text: `WARNED  test_cv_download_clicked — recruiter has not downloaded CV yet` },
+    { delay: 5900, cls: 'dim',     text: '' },
+    { delay: 6200, cls: 'success', text: `16 passed, 1 warning in 6.2s` },
+    { delay: 6500, cls: 'dim',     text: '' },
+    { delay: 6700, cls: 'info',    text: `→ Full test report: furkanbodur1995.github.io` },
+  ];
+
+  function mkLine(cls, text) {
+    const d = document.createElement('div');
+    d.className = `term-line term-out${cls ? ' ' + cls : ''}`;
+    if (cls === 'dim' && !text) { d.innerHTML = '&nbsp;'; return d; }
+    if (cls === 'dim' && text.startsWith('pytest')) {
+      d.className = 'term-line term-prompt';
+      d.innerHTML = `$ <span class="term-cmd">${text}</span>`;
+      return d;
+    }
+    d.textContent = text;
+    return d;
+  }
+
+  function runTests() {
+    body.innerHTML = '';
+    const cursor = document.createElement('div');
+    cursor.className = 'term-cursor-line';
+    cursor.innerHTML = '<span class="term-blink">█</span>';
+    body.appendChild(cursor);
+
+    TESTS.forEach(({ delay, cls, text }) => {
+      setTimeout(() => {
+        cursor.remove();
+        body.appendChild(mkLine(cls, text));
+        body.appendChild(cursor);
+        body.scrollTop = body.scrollHeight;
+      }, delay);
+    });
+
+    setTimeout(() => { cursor.remove(); }, TESTS[TESTS.length - 1].delay + 200);
+  }
+
+  btn.addEventListener('click', () => { overlay.classList.add('show'); runTests(); });
+  closeBtn.addEventListener('click', () => overlay.classList.remove('show'));
+  overlay.addEventListener('click', e => { if (e.target === overlay) overlay.classList.remove('show'); });
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') overlay.classList.remove('show'); });
+})();
+
+
+/* ────────────────────────────────────────
    19. RADAR CHART
 ──────────────────────────────────────── */
 (function initRadar() {

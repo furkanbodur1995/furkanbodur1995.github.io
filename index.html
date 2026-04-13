@@ -75,6 +75,10 @@
         <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
         Download CV
       </a>
+      <button class="sb-link sb-share-btn" id="copyShareBtn">
+        <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+        <span id="shareLabel">Share link</span>
+      </button>
     </div>
 
     <div class="sb-divider"></div>
@@ -127,6 +131,10 @@
         <span class="theme-icon">☀️</span>
         <span class="theme-label">Light mode</span>
       </button>
+      <button class="qa-mode-btn" id="qaModeBtn" title="Toggle QA Mode">
+        <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+        QA Mode
+      </button>
     </div>
   </aside>
 
@@ -167,6 +175,10 @@
             Download CV
           </a>
           <a href="#experience" class="btn-ghost">View Experience ↓</a>
+          <button class="btn-ghost btn-run-tests" id="runTestsBtn">
+            <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg>
+            Run Tests on This Page
+          </button>
         </div>
         <div class="hero-metrics" data-reveal data-delay="600">
           <div class="hm-item">
@@ -701,6 +713,21 @@
 
   <!-- COPY TOAST -->
   <div class="copy-toast" id="copyToast">📋 Email copied!</div>
+  <div class="copy-toast" id="shareToast">🔗 Link copied! Now send it to HR 😉</div>
+
+  <!-- RUN TESTS MODAL -->
+  <div class="rt-overlay" id="rtOverlay">
+    <div class="rt-modal">
+      <div class="rt-topbar">
+        <span class="term-dot td-red"></span>
+        <span class="term-dot td-yellow"></span>
+        <span class="term-dot td-green"></span>
+        <span class="rt-title">qa-suite — pytest</span>
+        <button class="rt-close" id="rtClose">×</button>
+      </div>
+      <div class="rt-body" id="rtBody"></div>
+    </div>
+  </div>
 
   <!-- SCROLL TO TOP -->
   <button class="scroll-top-btn" id="scrollTopBtn" aria-label="Scroll to top">
