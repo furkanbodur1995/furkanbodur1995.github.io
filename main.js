@@ -484,7 +484,7 @@ if (tlLine && tlSection) {
    15. KEYBOARD NAVIGATION
 ──────────────────────────────────────── */
 (function initKeyboardNav() {
-  const sections = ['about','careermap','experience','pipeline','project','skills'];
+  const sections = ['about','experience','careermap','pipeline','project','skills'];
   const hint = document.getElementById('kbHint');
 
   // Show hint after first scroll
