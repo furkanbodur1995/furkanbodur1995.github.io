@@ -1257,7 +1257,11 @@ Best,
   const CHAR_SPEED       = 2.2;    // px per frame (base)
   const BUG_SPEED        = 0.6;    // px per frame (wander)
   const CATCH_RADIUS     = 28;     // px to count as caught
-  const BUG_EMOJIS       = ['🐛','🪲','🐜','🦗','🕷️'];
+  const BUG_COLORS = [
+    '#f87171','#fb923c','#facc15','#a78bfa','#818cf8',
+    '#f472b6','#34d399','#38bdf8','#c084fc','#e879f9',
+  ];
+  const BUG_SHAPES = ['round','square','horned','blob','spiky'];
   const BUG_NAMES = [
     'NullPointerException', 'IndexOutOfBounds', 'Race Condition',
     'Off-By-One Error', 'Memory Leak', 'Infinite Loop',
@@ -1266,6 +1270,14 @@ Best,
     'CSS Z-Index War', 'undefined is not a function',
     'Works On My Machine™', 'Forgot to git pull',
     'Missing Semicolon', 'CORS Error', 'Div Not Centered',
+    'Production Hotfix', '!important Everywhere',
+    'JSON.parse(undefined)', 'Cannot read null',
+    'It Worked Yesterday', 'Merge Conflict',
+    'Floating Point Rounding', '===  vs ==',
+    'RegExp Catastrophic Backtrack', 'Zombie Process',
+    'Timezone Bug', 'Left Pad Incident',
+    'Callback Hell', 'chmod 777', 'SQL Injection',
+    'Forgot await', 'console.log Debugging',
   ];
   const TITLES = [
     [0,  'Junior Bug Squasher'],
@@ -1294,7 +1306,7 @@ Best,
   /* ── DOM: character ── */
   const charEl = document.createElement('div');
   charEl.className = 'bc-char';
-  charEl.innerHTML = '<img src="welcome.jpg" alt="" class="bc-char-img"/><span class="bc-char-net">🪤</span>';
+  charEl.innerHTML = '<img src="welcome.jpg" alt="" class="bc-char-img"/><span class="bc-char-net"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="var(--teal-light)" stroke-width="2"><circle cx="10" cy="10" r="7"/><line x1="15" y1="15" x2="22" y2="22" stroke-width="2.5" stroke-linecap="round"/><line x1="7" y1="7" x2="13" y2="13" opacity=".3"/><line x1="7" y1="13" x2="13" y2="7" opacity=".3"/></svg></span>';
   container.appendChild(charEl);
   updateCharPos();
 
@@ -1328,7 +1340,50 @@ Best,
     const H = window.innerHeight;
     const bug = document.createElement('div');
     bug.className = 'bc-bug';
-    bug.textContent = BUG_EMOJIS[Math.floor(Math.random() * BUG_EMOJIS.length)];
+
+    // build a random CSS monster
+    const color = BUG_COLORS[Math.floor(Math.random() * BUG_COLORS.length)];
+    const shape = BUG_SHAPES[Math.floor(Math.random() * BUG_SHAPES.length)];
+    const eyeCount = Math.random() > 0.3 ? 2 : (Math.random() > 0.5 ? 3 : 1);
+    const legPairs = 2 + Math.floor(Math.random() * 2); // 2 or 3 pairs
+
+    let radius = '50%';
+    if (shape === 'square') radius = '6px';
+    else if (shape === 'horned') radius = '50% 50% 20% 20%';
+    else if (shape === 'blob') radius = '60% 40% 50% 50%';
+    else if (shape === 'spiky') radius = '30% 70% 40% 60%';
+
+    let eyesHTML = '';
+    for (let e = 0; e < eyeCount; e++) {
+      const leftPos = eyeCount === 1 ? '50%' : eyeCount === 2 ? (e === 0 ? '28%' : '72%') : (e === 0 ? '20%' : e === 1 ? '50%' : '80%');
+      eyesHTML += `<span class="bc-eye" style="left:${leftPos}"><span class="bc-pupil"></span></span>`;
+    }
+
+    let legsHTML = '';
+    for (let l = 0; l < legPairs; l++) {
+      const topPct = 55 + l * (40 / legPairs);
+      legsHTML += `<span class="bc-leg bc-leg-l" style="top:${topPct}%"></span>`;
+      legsHTML += `<span class="bc-leg bc-leg-r" style="top:${topPct}%"></span>`;
+    }
+
+    const hasTeeth = Math.random() > 0.5;
+    const mouthHTML = hasTeeth
+      ? '<span class="bc-mouth bc-teeth">⏟</span>'
+      : '<span class="bc-mouth"></span>';
+
+    const hasAntenna = shape === 'horned' || Math.random() > 0.6;
+    const antennaHTML = hasAntenna
+      ? '<span class="bc-antenna bc-ant-l"></span><span class="bc-antenna bc-ant-r"></span>'
+      : '';
+
+    bug.innerHTML = `
+      <span class="bc-body" style="background:${color};border-radius:${radius};box-shadow:0 0 8px ${color}55">
+        ${antennaHTML}
+        <span class="bc-eyes">${eyesHTML}</span>
+        ${mouthHTML}
+      </span>
+      ${legsHTML}
+    `;
 
     // spawn INSIDE the viewport with margin
     const margin = 80;
