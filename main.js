@@ -1324,17 +1324,16 @@ Best,
   function spawnBug() {
     if (bugs.length >= MAX_BUGS) return;
 
+    const W = window.innerWidth;
+    const H = window.innerHeight;
     const bug = document.createElement('div');
     bug.className = 'bc-bug';
     bug.textContent = BUG_EMOJIS[Math.floor(Math.random() * BUG_EMOJIS.length)];
 
-    // spawn from a random edge
-    const edge = Math.floor(Math.random() * 4);
-    let x, y;
-    if (edge === 0) { x = rand(0, window.innerWidth); y = -30; }          // top
-    else if (edge === 1) { x = window.innerWidth + 30; y = rand(0, window.innerHeight); } // right
-    else if (edge === 2) { x = rand(0, window.innerWidth); y = window.innerHeight + 30; }  // bottom
-    else { x = -30; y = rand(0, window.innerHeight); }                     // left
+    // spawn INSIDE the viewport with margin
+    const margin = 80;
+    const x = rand(margin, W - margin);
+    const y = rand(margin, H - margin);
 
     const bugData = {
       el: bug, x, y,
@@ -1400,11 +1399,12 @@ Best,
       // clamp speed
       const spd = Math.sqrt(b.vx * b.vx + b.vy * b.vy);
       if (spd > BUG_SPEED * 1.5) { b.vx *= 0.95; b.vy *= 0.95; }
-      // keep in bounds (softly)
-      if (b.x < 20) b.vx += 0.1;
-      if (b.x > W - 20) b.vx -= 0.1;
-      if (b.y < 20) b.vy += 0.1;
-      if (b.y > H - 20) b.vy -= 0.1;
+      // keep in bounds (hard clamp + bounce)
+      const PAD = 40;
+      if (b.x < PAD)     { b.x = PAD;     b.vx = Math.abs(b.vx) * 0.5 + 0.2; }
+      if (b.x > W - PAD) { b.x = W - PAD; b.vx = -Math.abs(b.vx) * 0.5 - 0.2; }
+      if (b.y < PAD)     { b.y = PAD;     b.vy = Math.abs(b.vy) * 0.5 + 0.2; }
+      if (b.y > H - PAD) { b.y = H - PAD; b.vy = -Math.abs(b.vy) * 0.5 - 0.2; }
 
       b.x += b.vx;
       b.y += b.vy;
