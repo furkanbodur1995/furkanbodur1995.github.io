@@ -949,14 +949,7 @@ if (tlLine && tlSection) {
   const ORDER      = ['about','experience','careermap','pipeline','project','skills'];
   const PASS_DELAY = 520;
   let passed = 0;
-
-  let panelShown = false;
-  window.addEventListener('scroll', () => {
-    if (!panelShown && window.scrollY > 60) {
-      panelShown = true;
-      panel.classList.add('visible');
-    }
-  }, { passive: true });
+  let observing = false;
 
   function getItem(id) {
     return panel.querySelector(`.tr-item[data-tr-section="${id}"]`);
@@ -982,8 +975,20 @@ if (tlLine && tlSection) {
     });
   }, { rootMargin: '-20% 0px -20% 0px', threshold: 0 });
 
-  ORDER.forEach(id => {
-    const el = document.getElementById(id);
-    if (el) sectionObs.observe(el);
-  });
+  function startObserving() {
+    if (observing) return;
+    observing = true;
+    ORDER.forEach(id => {
+      const el = document.getElementById(id);
+      if (el) sectionObs.observe(el);
+    });
+  }
+
+  // Show panel + start observing only after first scroll
+  window.addEventListener('scroll', () => {
+    if (!panel.classList.contains('visible')) {
+      panel.classList.add('visible');
+    }
+    startObserving();
+  }, { passive: true });
 })();
