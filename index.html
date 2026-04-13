@@ -207,7 +207,7 @@
     <!-- ─── EXPERIENCE ─── -->
     <section id="experience" class="section">
       <div class="section-head" data-reveal>
-        <span class="s-tag">Career</span>
+        <span class="s-tag rpg-tag">⚔&nbsp;Quest Log</span>
         <h2 class="s-title">Experience</h2>
         <p class="s-sub">From safety-critical aerospace systems to AI-powered testing pipelines.</p>
       </div>
@@ -219,6 +219,7 @@
         <div class="tl-item" data-reveal>
           <div class="tl-dot tl-dot-active"></div>
           <div class="tl-content">
+            <div class="rpg-quest-status rpg-quest-active">▶ ACTIVE QUEST</div>
             <div class="tl-period">Feb 2022 — Present</div>
             <div class="tl-org">Siemens Foundational Technologies</div>
             <div class="tl-role">Software Development Engineer in Test (SDET)</div>
@@ -241,6 +242,7 @@
         <div class="tl-item" data-reveal>
           <div class="tl-dot"></div>
           <div class="tl-content">
+            <div class="rpg-quest-status rpg-quest-done">✓ QUEST COMPLETE</div>
             <div class="tl-period">Jun 2017 — Feb 2022</div>
             <div class="tl-org">Turkish Aerospace Industry (TAI / TUSAŞ)</div>
             <div class="tl-role">Software Test Engineer &amp; UAV Pilot</div>
@@ -299,6 +301,7 @@
         <div class="tl-item" data-reveal>
           <div class="tl-dot"></div>
           <div class="tl-content">
+            <div class="rpg-quest-status rpg-quest-lore">📖 LORE ACQUIRED</div>
             <div class="tl-period">Aug 2013 — Jun 2017</div>
             <div class="tl-org">Gazi University</div>
             <div class="tl-role">B.Sc. Computer Engineering</div>
@@ -314,7 +317,7 @@
     <!-- ─── CAREER MAP ─── -->
     <section id="careermap" class="section">
       <div class="section-head" data-reveal>
-        <span class="s-tag">Journey</span>
+        <span class="s-tag rpg-tag">🗺&nbsp;World Map</span>
         <h2 class="s-title">Career Map</h2>
         <p class="s-sub">Two industries, one thread — always solving complex problems through quality engineering.</p>
       </div>
@@ -385,7 +388,7 @@
     <!-- ─── AI PIPELINE ─── -->
     <section id="pipeline" class="section">
       <div class="section-head" data-reveal>
-        <span class="s-tag">Engineering</span>
+        <span class="s-tag rpg-tag">⚡&nbsp;Spell Forge</span>
         <h2 class="s-title">AI Orchestration Pipeline</h2>
         <p class="s-sub">A multi-agent system that turns code commits into Jira-ready test cases — no human in the loop.</p>
       </div>
@@ -502,7 +505,7 @@
     <!-- ─── SIGNATURE PROJECT ─── -->
     <section id="project" class="section">
       <div class="section-head" data-reveal>
-        <span class="s-tag">Signature Project</span>
+        <span class="s-tag rpg-tag">📜&nbsp;Legendary Item</span>
         <h2 class="s-title">AI-Driven Test Automation</h2>
         <p class="s-sub">Building the bridge between natural language requirements and production-ready test code — automatically, at deployment time.</p>
       </div>
@@ -650,38 +653,79 @@
     <!-- ─── SKILLS ─── -->
     <section id="skills" class="section">
       <div class="section-head" data-reveal>
-        <span class="s-tag">Expertise</span>
+        <span class="s-tag rpg-tag">📊&nbsp;Character Sheet</span>
         <h2 class="s-title">Skills</h2>
       </div>
-      <div class="skills-grid">
-        <div class="skill-cat" data-reveal data-delay="0">
-          <div class="sc-title">AI &amp; Modern QA</div>
+
+      <!-- RPG STAT BARS -->
+      <div class="rpg-stats" data-reveal>
+
+        <div class="rpg-stat">
+          <div class="rpg-stat-header">
+            <span class="rpg-attr rpg-int">INT</span>
+            <span class="rpg-attr-name">Intelligence &mdash; AI &amp; Modern QA</span>
+            <span class="rpg-attr-val">95</span>
+          </div>
+          <div class="rpg-bar-track"><div class="rpg-bar-fill" data-val="95"></div></div>
           <div class="sc-tags">
             <span>AI Agent Orchestration</span><span>LLM Integration</span><span>MCP Protocol</span>
             <span>Prompt Engineering</span><span>RAG</span><span>Vector Databases</span><span>Automated Documentation</span>
           </div>
         </div>
-        <div class="skill-cat" data-reveal data-delay="100">
-          <div class="sc-title">Test Automation</div>
+
+        <div class="rpg-stat">
+          <div class="rpg-stat-header">
+            <span class="rpg-attr rpg-dex">DEX</span>
+            <span class="rpg-attr-name">Dexterity &mdash; Test Automation</span>
+            <span class="rpg-attr-val">92</span>
+          </div>
+          <div class="rpg-bar-track"><div class="rpg-bar-fill" data-val="92"></div></div>
           <div class="sc-tags">
             <span>Python</span><span>Playwright</span><span>Selenium</span><span>TestComplete</span>
             <span>Postman</span><span>SoapUI</span><span>JMeter</span><span>BDD / Gherkin</span>
           </div>
         </div>
-        <div class="skill-cat" data-reveal data-delay="200">
-          <div class="sc-title">DevOps &amp; Infrastructure</div>
+
+        <div class="rpg-stat">
+          <div class="rpg-stat-header">
+            <span class="rpg-attr rpg-str">STR</span>
+            <span class="rpg-attr-name">Strength &mdash; DevOps &amp; Infrastructure</span>
+            <span class="rpg-attr-val">80</span>
+          </div>
+          <div class="rpg-bar-track"><div class="rpg-bar-fill" data-val="80"></div></div>
           <div class="sc-tags">
             <span>Jenkins</span><span>GitLab CI/CD</span><span>Docker</span>
             <span>SQL</span><span>Jira API</span><span>AWS Basics</span><span>Linux</span>
           </div>
         </div>
-        <div class="skill-cat" data-reveal data-delay="300">
-          <div class="sc-title">Domain Knowledge</div>
+
+        <div class="rpg-stat">
+          <div class="rpg-stat-header">
+            <span class="rpg-attr rpg-wis">WIS</span>
+            <span class="rpg-attr-name">Wisdom &mdash; Domain Knowledge</span>
+            <span class="rpg-attr-val">88</span>
+          </div>
+          <div class="rpg-bar-track"><div class="rpg-bar-fill" data-val="88"></div></div>
           <div class="sc-tags">
             <span>UAV Systems</span><span>Aerospace QA</span><span>Safety-Critical Testing</span>
             <span>RBAC / Security Testing</span><span>ERP Systems</span><span>Performance Testing</span>
           </div>
         </div>
+
+        <div class="rpg-stat">
+          <div class="rpg-stat-header">
+            <span class="rpg-attr rpg-con">CON</span>
+            <span class="rpg-attr-name">Constitution &mdash; Certifications</span>
+            <span class="rpg-attr-val">100</span>
+          </div>
+          <div class="rpg-bar-track"><div class="rpg-bar-fill" data-val="100"></div></div>
+          <div class="rpg-achievements">
+            <div class="rpg-ach"><span class="rpg-ach-icon">🏆</span><span class="rpg-ach-name">ISTQB Advanced — Test Manager</span><span class="rpg-ach-badge">UNLOCKED</span></div>
+            <div class="rpg-ach"><span class="rpg-ach-icon">🏆</span><span class="rpg-ach-name">ISTQB Advanced — Test Analyst</span><span class="rpg-ach-badge">UNLOCKED</span></div>
+            <div class="rpg-ach"><span class="rpg-ach-icon">🏆</span><span class="rpg-ach-name">ISTQB Advanced — Technical Test Analyst</span><span class="rpg-ach-badge">UNLOCKED</span></div>
+          </div>
+        </div>
+
       </div>
 
       <!-- RADAR CHART -->

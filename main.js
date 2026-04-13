@@ -936,3 +936,25 @@ if (tlLine && tlSection) {
   }, { threshold: 0.3 });
   obs.observe(svgEl);
 })();
+
+
+/* ────────────────────────────────────────
+   24. RPG STAT BAR ANIMATION
+──────────────────────────────────────── */
+(function initRpgBars() {
+  const bars = document.querySelectorAll('.rpg-bar-fill');
+  if (!bars.length) return;
+
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (!entry.isIntersecting) return;
+      const bar = entry.target;
+      const val = parseInt(bar.dataset.val, 10) || 0;
+      // slight delay so reveal animation plays first
+      setTimeout(() => { bar.style.width = val + '%'; }, 180);
+      obs.unobserve(bar);
+    });
+  }, { threshold: 0.3 });
+
+  bars.forEach(b => obs.observe(b));
+})();
