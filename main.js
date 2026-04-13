@@ -1242,3 +1242,233 @@ Best,
     if (target) target.scrollIntoView({ behavior: 'smooth' });
   }, { passive: true });
 })();
+
+
+/* ────────────────────────────────────────
+   29. BUG CATCHER — Interactive background game
+──────────────────────────────────────── */
+(function initBugCatcher() {
+  if (window.matchMedia('(max-width: 820px)').matches) return;      // skip mobile
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+  /* ── config ── */
+  const SPAWN_INTERVAL   = 4500;   // ms between bug spawns
+  const MAX_BUGS         = 6;      // max alive bugs
+  const CHAR_SPEED       = 2.2;    // px per frame (base)
+  const BUG_SPEED        = 0.6;    // px per frame (wander)
+  const CATCH_RADIUS     = 28;     // px to count as caught
+  const BUG_EMOJIS       = ['🐛','🪲','🐜','🦗','🕷️'];
+  const BUG_NAMES = [
+    'NullPointerException', 'IndexOutOfBounds', 'Race Condition',
+    'Off-By-One Error', 'Memory Leak', 'Infinite Loop',
+    'Unhandled Promise', 'Segfault', 'Stack Overflow',
+    'Type Mismatch', 'Deadlock', 'Heisenbug',
+    'CSS Z-Index War', 'undefined is not a function',
+    'Works On My Machine™', 'Forgot to git pull',
+    'Missing Semicolon', 'CORS Error', 'Div Not Centered',
+  ];
+  const TITLES = [
+    [0,  'Junior Bug Squasher'],
+    [5,  'Bug Hunter'],
+    [12, 'Senior Exterminator'],
+    [20, 'Principal Debugger'],
+    [35, 'Staff Bug Whisperer'],
+    [50, 'VP of Bug Annihilation'],
+  ];
+
+  /* ── state ── */
+  let bugs     = [];
+  let caught   = 0;
+  let charX    = window.innerWidth / 2;
+  let charY    = window.innerHeight / 2;
+  let targetBug = null;
+  let idle     = true;
+  let idleAngle = 0;
+
+  /* ── DOM: container ── */
+  const container = document.createElement('div');
+  container.id = 'bugCatcherLayer';
+  container.style.cssText = 'position:fixed;inset:0;pointer-events:none;z-index:5;overflow:hidden;';
+  document.body.appendChild(container);
+
+  /* ── DOM: character ── */
+  const charEl = document.createElement('div');
+  charEl.className = 'bc-char';
+  charEl.innerHTML = '<span class="bc-char-text">FB</span><span class="bc-char-net">🪤</span>';
+  container.appendChild(charEl);
+  updateCharPos();
+
+  /* ── DOM: counter panel ── */
+  const counter = document.createElement('div');
+  counter.className = 'bc-counter';
+  counter.innerHTML = '<span class="bc-counter-icon">🪲</span><span class="bc-counter-num">×0</span><span class="bc-counter-title">Junior Bug Squasher</span>';
+  document.body.appendChild(counter);
+
+  /* ── helpers ── */
+  function rand(a, b) { return a + Math.random() * (b - a); }
+
+  function getTitle() {
+    let t = TITLES[0][1];
+    for (const [min, label] of TITLES) { if (caught >= min) t = label; }
+    return t;
+  }
+
+  function getSpeed() {
+    return CHAR_SPEED + Math.floor(caught / 8) * 0.3;  // gets faster
+  }
+
+  function updateCharPos() {
+    charEl.style.transform = `translate(${charX}px, ${charY}px)`;
+  }
+
+  function spawnBug() {
+    if (bugs.length >= MAX_BUGS) return;
+
+    const bug = document.createElement('div');
+    bug.className = 'bc-bug';
+    bug.textContent = BUG_EMOJIS[Math.floor(Math.random() * BUG_EMOJIS.length)];
+
+    // spawn from a random edge
+    const edge = Math.floor(Math.random() * 4);
+    let x, y;
+    if (edge === 0) { x = rand(0, window.innerWidth); y = -30; }          // top
+    else if (edge === 1) { x = window.innerWidth + 30; y = rand(0, window.innerHeight); } // right
+    else if (edge === 2) { x = rand(0, window.innerWidth); y = window.innerHeight + 30; }  // bottom
+    else { x = -30; y = rand(0, window.innerHeight); }                     // left
+
+    const bugData = {
+      el: bug, x, y,
+      vx: rand(-BUG_SPEED, BUG_SPEED),
+      vy: rand(-BUG_SPEED, BUG_SPEED),
+      wobble: rand(0, Math.PI * 2),
+      name: BUG_NAMES[Math.floor(Math.random() * BUG_NAMES.length)],
+    };
+
+    bug.style.transform = `translate(${x}px, ${y}px)`;
+    container.appendChild(bug);
+    bugs.push(bugData);
+  }
+
+  function removeBug(bugData) {
+    bugs = bugs.filter(b => b !== bugData);
+    bugData.el.remove();
+  }
+
+  function showCatchEffect(x, y, name) {
+    // pop particle
+    const pop = document.createElement('div');
+    pop.className = 'bc-pop';
+    pop.textContent = '💥';
+    pop.style.cssText = `left:${x}px;top:${y}px;`;
+    container.appendChild(pop);
+    setTimeout(() => pop.remove(), 600);
+
+    // label
+    const label = document.createElement('div');
+    label.className = 'bc-label';
+    label.textContent = name;
+    label.style.cssText = `left:${x}px;top:${y - 20}px;`;
+    container.appendChild(label);
+    setTimeout(() => label.remove(), 1800);
+
+    // +1 indicator
+    const plus = document.createElement('div');
+    plus.className = 'bc-plus';
+    plus.textContent = '+1';
+    plus.style.cssText = `left:${x + 15}px;top:${y - 10}px;`;
+    container.appendChild(plus);
+    setTimeout(() => plus.remove(), 900);
+  }
+
+  function updateCounter() {
+    counter.querySelector('.bc-counter-num').textContent = `×${caught}`;
+    counter.querySelector('.bc-counter-title').textContent = getTitle();
+    counter.classList.add('bc-counter-bump');
+    setTimeout(() => counter.classList.remove('bc-counter-bump'), 300);
+  }
+
+  /* ── game loop ── */
+  function tick() {
+    const W = window.innerWidth;
+    const H = window.innerHeight;
+
+    // move bugs (wander)
+    for (const b of bugs) {
+      b.wobble += 0.03;
+      b.vx += Math.sin(b.wobble) * 0.04;
+      b.vy += Math.cos(b.wobble * 0.7) * 0.04;
+      // clamp speed
+      const spd = Math.sqrt(b.vx * b.vx + b.vy * b.vy);
+      if (spd > BUG_SPEED * 1.5) { b.vx *= 0.95; b.vy *= 0.95; }
+      // keep in bounds (softly)
+      if (b.x < 20) b.vx += 0.1;
+      if (b.x > W - 20) b.vx -= 0.1;
+      if (b.y < 20) b.vy += 0.1;
+      if (b.y > H - 20) b.vy -= 0.1;
+
+      b.x += b.vx;
+      b.y += b.vy;
+      b.el.style.transform = `translate(${b.x}px, ${b.y}px) rotate(${Math.atan2(b.vy, b.vx) * 180 / Math.PI}deg)`;
+    }
+
+    // find nearest bug
+    let nearest = null;
+    let nearDist = Infinity;
+    for (const b of bugs) {
+      const dx = b.x - charX;
+      const dy = b.y - charY;
+      const dist = Math.sqrt(dx * dx + dy * dy);
+      if (dist < nearDist) { nearDist = dist; nearest = b; }
+    }
+
+    if (nearest) {
+      idle = false;
+      targetBug = nearest;
+      const dx = nearest.x - charX;
+      const dy = nearest.y - charY;
+      const dist = Math.sqrt(dx * dx + dy * dy);
+      const speed = getSpeed();
+
+      if (dist > speed) {
+        charX += (dx / dist) * speed;
+        charY += (dy / dist) * speed;
+      }
+
+      // flip character toward bug
+      charEl.classList.toggle('bc-char-flip', dx < 0);
+
+      // catch!
+      if (dist < CATCH_RADIUS) {
+        caught++;
+        showCatchEffect(nearest.x, nearest.y, nearest.name);
+        removeBug(nearest);
+        targetBug = null;
+        updateCounter();
+        // net swing animation
+        charEl.classList.add('bc-swing');
+        setTimeout(() => charEl.classList.remove('bc-swing'), 400);
+      }
+    } else {
+      // idle: wander slowly
+      idle = true;
+      idleAngle += 0.008;
+      charX += Math.cos(idleAngle) * 0.3;
+      charY += Math.sin(idleAngle * 0.6) * 0.3;
+      // keep in bounds
+      charX = Math.max(30, Math.min(W - 30, charX));
+      charY = Math.max(30, Math.min(H - 30, charY));
+    }
+
+    charEl.classList.toggle('bc-char-idle', idle);
+    updateCharPos();
+    requestAnimationFrame(tick);
+  }
+
+  /* ── start ── */
+  // initial delay so page loads calmly first
+  setTimeout(() => {
+    spawnBug();
+    requestAnimationFrame(tick);
+    setInterval(spawnBug, SPAWN_INTERVAL);
+  }, 6000);
+})();
