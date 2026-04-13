@@ -116,149 +116,145 @@ setTimeout(type, 700);
 
 
 /* ────────────────────────────────────────
-   5. CANVAS PARTICLE NETWORK (hero)
+   5. MAGNETIC DOT GRID (full-page background)
 ──────────────────────────────────────── */
-(function initParticles() {
+(function initMagneticGrid() {
   const canvas = document.getElementById('particleCanvas');
   if (!canvas) return;
+
+  // Make the canvas fixed full-page
+  canvas.style.cssText = 'position:fixed;inset:0;width:100%;height:100%;z-index:0;pointer-events:none;';
+  document.body.insertBefore(canvas, document.body.firstChild);
+
   const ctx = canvas.getContext('2d');
-  let W, H, particles = [];
-
   const isMobile = () => window.innerWidth <= 820;
-  const COUNT    = () => isMobile() ? 40 : 80;
-  const LINK_DIST    = 140;   // particle-to-particle link
-  const MOUSE_DIST   = 180;   // mouse repulsion radius
-  const MOUSE_LINK   = 220;   // mouse-to-particle beam radius
-  const REPEL_FORCE  = 2.8;
+  const SPACING  = () => isMobile() ? 64 : 48;
+  const ATTRACT_R = 180;   // mouse pull radius
+  const MOUSE_F   = 0.32;  // mouse attraction strength
+  const SPRING_K  = 0.055; // spring-back stiffness
+  const DAMPING   = 0.76;  // velocity damping each frame
+  const MAX_D     = 60;    // max displacement (px)
+  const CLICK_R   = 230;   // click burst radius
+  const CLICK_F   = 85;    // click burst force
 
-  // live mouse position relative to canvas
+  let W, H, dots = [], ripples = [];
   let mx = -9999, my = -9999;
-  canvas.addEventListener('mousemove', e => {
-    const r = canvas.getBoundingClientRect();
-    mx = e.clientX - r.left;
-    my = e.clientY - r.top;
-  });
-  canvas.addEventListener('mouseleave', () => { mx = -9999; my = -9999; });
+
+  function initDots() {
+    dots = [];
+    const sp = SPACING();
+    const cols = Math.ceil(W / sp) + 2;
+    const rows = Math.ceil(H / sp) + 2;
+    for (let r = 0; r < rows; r++) {
+      for (let c = 0; c < cols; c++) {
+        const ox = c * sp, oy = r * sp;
+        dots.push({ ox, oy, x: ox, y: oy, vx: 0, vy: 0 });
+      }
+    }
+  }
 
   function resize() {
-    W = canvas.width  = canvas.offsetWidth;
-    H = canvas.height = canvas.offsetHeight;
+    W = canvas.width  = window.innerWidth;
+    H = canvas.height = window.innerHeight;
+    initDots();
   }
-  window.addEventListener('resize', () => { resize(); init(); });
+  window.addEventListener('resize', () => resize());
   resize();
 
-  function mkParticle() {
-    const angle = Math.random() * Math.PI * 2;
-    const speed = .15 + Math.random() * .20;
-    return {
-      x: Math.random() * W, y: Math.random() * H,
-      vx: Math.cos(angle) * speed,
-      vy: Math.sin(angle) * speed,
-      ox: 0, oy: 0,          // offset from mouse repulsion
-      r: 1.4 + Math.random() * 1.3
-    };
-  }
+  // Track mouse across whole document
+  document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; });
+  document.addEventListener('mouseleave', () => { mx = -9999; my = -9999; });
 
-  function init() { particles = Array.from({ length: COUNT() }, mkParticle); }
-  init();
-
-  let raf;
-  function draw() {
-    ctx.clearRect(0, 0, W, H);
-    const teal = getComputedStyle(html).getPropertyValue('--teal-light').trim() || '#14b8a6';
-
-    // update positions
-    for (const p of particles) {
-      p.x += p.vx; p.y += p.vy;
-      if (p.x < 0) p.x = W; if (p.x > W) p.x = 0;
-      if (p.y < 0) p.y = H; if (p.y > H) p.y = 0;
-    }
-
-    // particle-to-particle links
-    for (let i = 0; i < particles.length; i++) {
-      for (let j = i + 1; j < particles.length; j++) {
-        const dx = particles[i].x - particles[j].x;
-        const dy = particles[i].y - particles[j].y;
-        const d  = Math.sqrt(dx * dx + dy * dy);
-        if (d < LINK_DIST) {
-          const alpha = (1 - d / LINK_DIST) * 0.22;
-          ctx.beginPath();
-          ctx.moveTo(particles[i].x, particles[i].y);
-          ctx.lineTo(particles[j].x, particles[j].y);
-          ctx.strokeStyle = teal + Math.round(alpha * 255).toString(16).padStart(2, '0');
-          ctx.lineWidth = .6;
-          ctx.stroke();
-        }
+  // Click burst
+  document.addEventListener('click', e => {
+    // skip clicks on interactive UI elements
+    if (e.target.closest('a,button,input,select,textarea,.sidebar,.copy-toast,.rt-overlay,.kb-hint')) return;
+    ripples.push({ x: e.clientX, y: e.clientY, t: performance.now() });
+    const cx = e.clientX, cy = e.clientY;
+    for (const d of dots) {
+      const dx = d.ox - cx, dy = d.oy - cy;
+      const dist = Math.sqrt(dx * dx + dy * dy);
+      if (dist < CLICK_R && dist > 0.1) {
+        const force = (1 - dist / CLICK_R) * CLICK_F;
+        d.vx += (dx / dist) * force;
+        d.vy += (dy / dist) * force;
       }
-    }
-
-    // mouse interaction
-    const hasMouse = mx > 0 && my > 0;
-    if (hasMouse) {
-      for (const p of particles) {
-        const dx = p.x - mx;
-        const dy = p.y - my;
-        const d  = Math.sqrt(dx * dx + dy * dy);
-
-        // repulsion — push particles away
-        if (d < MOUSE_DIST && d > 0.1) {
-          const force = (1 - d / MOUSE_DIST) * REPEL_FORCE;
-          p.vx += (dx / d) * force * 0.04;
-          p.vy += (dy / d) * force * 0.04;
-          // clamp speed
-          const spd = Math.sqrt(p.vx * p.vx + p.vy * p.vy);
-          if (spd > 3) { p.vx = p.vx / spd * 3; p.vy = p.vy / spd * 3; }
-        }
-
-        // bright beam from cursor to nearby particles
-        if (d < MOUSE_LINK) {
-          const alpha = (1 - d / MOUSE_LINK) * 0.55;
-          const hex   = Math.round(alpha * 255).toString(16).padStart(2, '0');
-          ctx.beginPath();
-          ctx.moveTo(mx, my);
-          ctx.lineTo(p.x, p.y);
-          ctx.strokeStyle = teal + hex;
-          ctx.lineWidth = 1.1;
-          ctx.stroke();
-        }
-      }
-
-      // cursor glow dot
-      const grad = ctx.createRadialGradient(mx, my, 0, mx, my, 40);
-      grad.addColorStop(0, teal + '44');
-      grad.addColorStop(1, teal + '00');
-      ctx.beginPath();
-      ctx.arc(mx, my, 40, 0, Math.PI * 2);
-      ctx.fillStyle = grad;
-      ctx.fill();
-
-      // small center dot
-      ctx.beginPath();
-      ctx.arc(mx, my, 2.5, 0, Math.PI * 2);
-      ctx.fillStyle = teal + 'cc';
-      ctx.fill();
-    }
-
-    // draw particle dots (on top)
-    for (const p of particles) {
-      ctx.beginPath();
-      ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-      ctx.fillStyle = teal + 'aa';
-      ctx.fill();
-    }
-
-    raf = requestAnimationFrame(draw);
-  }
-
-  // Only run when hero is visible
-  const io = new IntersectionObserver(entries => {
-    if (entries[0].isIntersecting) {
-      resize(); init(); draw();
-    } else {
-      cancelAnimationFrame(raf);
     }
   });
-  io.observe(canvas);
+
+  function draw() {
+    ctx.clearRect(0, 0, W, H);
+    const teal     = getComputedStyle(html).getPropertyValue('--teal-light').trim() || '#14b8a6';
+    const hasMouse = mx > -999;
+
+    for (const d of dots) {
+      // Spring toward origin
+      d.vx += (d.ox - d.x) * SPRING_K;
+      d.vy += (d.oy - d.y) * SPRING_K;
+
+      // Mouse attraction
+      if (hasMouse) {
+        const dx = mx - d.ox, dy = my - d.oy;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+        if (dist < ATTRACT_R && dist > 0.1) {
+          const f = (1 - dist / ATTRACT_R) * MOUSE_F;
+          d.vx += (dx / dist) * f;
+          d.vy += (dy / dist) * f;
+        }
+      }
+
+      // Damping + integrate
+      d.vx *= DAMPING;
+      d.vy *= DAMPING;
+      d.x = d.ox + Math.max(-MAX_D, Math.min(MAX_D, (d.x - d.ox) + d.vx));
+      d.y = d.oy + Math.max(-MAX_D, Math.min(MAX_D, (d.y - d.oy) + d.vy));
+
+      // Draw dot — brighter + larger when displaced
+      const disp  = Math.sqrt((d.x - d.ox) ** 2 + (d.y - d.oy) ** 2);
+      const t     = disp / MAX_D;
+      const alpha = 0.06 + t * 0.48;
+      const r     = 1.2 + t * 1.6;
+      const hex   = Math.round(Math.min(alpha, 0.62) * 255).toString(16).padStart(2, '0');
+      ctx.beginPath();
+      ctx.arc(d.x, d.y, r, 0, Math.PI * 2);
+      ctx.fillStyle = teal + hex;
+      ctx.fill();
+    }
+
+    // Draw cursor glow
+    if (hasMouse) {
+      const grad = ctx.createRadialGradient(mx, my, 0, mx, my, 60);
+      grad.addColorStop(0, teal + '22');
+      grad.addColorStop(1, teal + '00');
+      ctx.beginPath();
+      ctx.arc(mx, my, 60, 0, Math.PI * 2);
+      ctx.fillStyle = grad;
+      ctx.fill();
+    }
+
+    // Draw ripples
+    const now = performance.now();
+    ripples = ripples.filter(rp => now - rp.t < 800);
+    for (const rp of ripples) {
+      const p = (now - rp.t) / 800;
+      const eased = 1 - Math.pow(1 - p, 2);
+      ctx.beginPath();
+      ctx.arc(rp.x, rp.y, eased * CLICK_R * 1.05, 0, Math.PI * 2);
+      ctx.strokeStyle = teal + Math.round((1 - p) * 0.45 * 255).toString(16).padStart(2, '0');
+      ctx.lineWidth = 1.5 * (1 - p);
+      ctx.stroke();
+      // inner second ring
+      ctx.beginPath();
+      ctx.arc(rp.x, rp.y, eased * CLICK_R * 0.55, 0, Math.PI * 2);
+      ctx.strokeStyle = teal + Math.round((1 - p) * 0.25 * 255).toString(16).padStart(2, '0');
+      ctx.lineWidth = 0.8;
+      ctx.stroke();
+    }
+
+    requestAnimationFrame(draw);
+  }
+
+  draw();
 })();
 
 
