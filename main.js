@@ -1012,7 +1012,7 @@ if (tlLine && tlSection) {
     footer.innerHTML = '<button class="tr-hire-btn" id="trHireBtn">🎉 HIRE ME!</button>';
     document.getElementById('trHireBtn').addEventListener('click', () => {
       launchConfetti();
-      showHireToast();
+      openHireMail();
     });
   }
 
@@ -1064,33 +1064,31 @@ if (tlLine && tlSection) {
     })();
   }
 
-  function showHireToast() {
-    const msgs = [
-      '🚀 Forwarding your CV to Google, Apple & Netflix...',
-      '📨 Sending offer letter... please hold.',
-      '🤝 HR has been notified. Salary negotiation incoming.',
-    ];
-    const t = document.createElement('div');
-    t.textContent = msgs[Math.floor(Math.random() * msgs.length)];
-    t.style.cssText = `
-      position:fixed;bottom:5rem;left:50%;
-      transform:translateX(-50%) translateY(20px);
-      background:var(--bg3);border:1px solid var(--teal-border);
-      color:var(--txt);font-family:'JetBrains Mono',monospace;font-size:.73rem;
-      padding:.65rem 1.3rem;border-radius:9px;z-index:9998;
-      opacity:0;transition:opacity .3s,transform .3s;white-space:nowrap;
-      box-shadow:0 8px 32px rgba(0,0,0,.35);
-    `;
-    document.body.appendChild(t);
-    requestAnimationFrame(() => {
-      t.style.opacity = '1';
-      t.style.transform = 'translateX(-50%) translateY(0)';
-    });
-    setTimeout(() => {
-      t.style.opacity = '0';
-      t.style.transform = 'translateX(-50%) translateY(20px)';
-      setTimeout(() => t.remove(), 400);
-    }, 3500);
+  function openHireMail() {
+    const to      = 'furkan.bodur@gmail.com';
+    const subject = encodeURIComponent('RE: Your hire_criteria.py — all tests passed ✅');
+    const body    = encodeURIComponent(
+`Hi Furkan,
+
+I just ran hire_criteria.py on your portfolio and all 6 tests passed.
+
+PASSED  test_about
+PASSED  test_experience
+PASSED  test_roadmap
+PASSED  test_ai_pipeline
+PASSED  test_project
+PASSED  test_skills
+
+6 passed in <time_spent>s — no warnings, no regressions.
+
+Based on these results, I'd like to move forward with an interview.
+
+When are you available?
+
+Best,
+[Your Name]`
+    );
+    window.location.href = `mailto:${to}?subject=${subject}&body=${body}`;
   }
 })();
 
