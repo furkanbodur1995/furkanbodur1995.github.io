@@ -1045,9 +1045,22 @@ kbd {
   border: none; border-radius: 7px; padding: .55rem 1.2rem;
   font-size: .84rem; font-weight: 600; cursor: pointer;
   transition: background .2s, transform .15s;
+  box-shadow: 0 0 0 0 rgba(98,100,167,.5);
+  animation: sendPulse 2.2s ease infinite;
 }
-.fb-send-btn:hover { background: #4f52a0; transform: translateY(-1px); }
-.fb-send-btn:disabled { opacity: .5; cursor: not-allowed; transform: none; }
+@keyframes sendPulse {
+  0%   { box-shadow: 0 0 0 0 rgba(98,100,167,.55); }
+  60%  { box-shadow: 0 0 0 8px rgba(98,100,167,0); }
+  100% { box-shadow: 0 0 0 0 rgba(98,100,167,0); }
+}
+.fb-send-hint {
+  font-size: .72rem; font-weight: 400; opacity: .75;
+  font-family: 'JetBrains Mono', monospace;
+  animation: hintBlink 1.4s step-end infinite;
+}
+@keyframes hintBlink { 0%,100%{opacity:.75} 50%{opacity:.2} }
+.fb-send-btn:hover { background: #4f52a0; transform: translateY(-1px); animation: none; }
+.fb-send-btn:disabled { opacity: .5; cursor: not-allowed; transform: none; animation: none; }
 
 .fb-workflow-pane {
   border-top: 1px solid var(--border);

@@ -241,7 +241,7 @@
             <span class="ht-icon">📡</span>
             <span class="ht-text"><span class="ht-title">Skills Radar</span><span class="ht-sub">Interactive chart</span></span>
           </a>
-          <a href="#pipeline" class="ht-chip" onclick="document.getElementById('projWorkflow').scrollIntoView({behavior:'smooth'});return false;">
+          <a href="#pipeline" class="ht-chip" onclick="document.getElementById('projTrigger').scrollIntoView({behavior:'smooth',block:'center'});return false;">
             <span class="ht-icon">💬</span>
             <span class="ht-text"><span class="ht-title">Teams → n8n</span><span class="ht-sub">Live workflow</span></span>
           </a>
@@ -640,6 +640,7 @@
           <button class="fb-send-btn" id="projRunBtn">
             <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
             Send message in Teams to trigger
+            <span class="fb-send-hint">← click</span>
           </button>
         </div>
 
