@@ -1306,7 +1306,18 @@ Best,
   /* ── DOM: character ── */
   const charEl = document.createElement('div');
   charEl.className = 'bc-char';
-  charEl.innerHTML = '<img src="welcome.jpg" alt="" class="bc-char-img"/><span class="bc-char-net"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="var(--teal-light)" stroke-width="2"><circle cx="10" cy="10" r="7"/><line x1="15" y1="15" x2="22" y2="22" stroke-width="2.5" stroke-linecap="round"/><line x1="7" y1="7" x2="13" y2="13" opacity=".3"/><line x1="7" y1="13" x2="13" y2="7" opacity=".3"/></svg></span>';
+  charEl.innerHTML = `
+    <span class="bc-horn bc-horn-l"></span>
+    <span class="bc-horn bc-horn-r"></span>
+    <span class="bc-arm bc-arm-l"><span class="bc-claw"></span></span>
+    <span class="bc-arm bc-arm-r"><span class="bc-claw"></span></span>
+    <img src="welcome.jpg" alt="" class="bc-char-img"/>
+    <span class="bc-char-leg bc-cl-l1"></span>
+    <span class="bc-char-leg bc-cl-r1"></span>
+    <span class="bc-char-leg bc-cl-l2"></span>
+    <span class="bc-char-leg bc-cl-r2"></span>
+    <span class="bc-char-net"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="var(--teal-light)" stroke-width="2"><circle cx="10" cy="10" r="7"/><line x1="15" y1="15" x2="22" y2="22" stroke-width="2.5" stroke-linecap="round"/><line x1="7" y1="7" x2="13" y2="13" opacity=".3"/><line x1="7" y1="13" x2="13" y2="7" opacity=".3"/></svg></span>
+  `;
   container.appendChild(charEl);
   updateCharPos();
 

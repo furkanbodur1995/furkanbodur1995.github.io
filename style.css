@@ -1533,15 +1533,76 @@ kbd {
 /* Character */
 .bc-char {
   position: absolute; top: 0; left: 0; will-change: transform;
-  width: 52px; height: 52px; margin: -26px 0 0 -26px;
+  width: 68px; height: 68px; margin: -34px 0 0 -34px;
   transition: none;
 }
 .bc-char-img {
   width: 44px; height: 44px; border-radius: 50%;
   object-fit: cover; object-position: center top;
-  border: 2px solid var(--teal);
-  box-shadow: 0 2px 12px rgba(13,148,136,.5);
-  position: relative; z-index: 2;
+  border: 2.5px solid var(--teal);
+  box-shadow: 0 2px 14px rgba(13,148,136,.55);
+  position: absolute; z-index: 2;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+/* Horns */
+.bc-horn {
+  position: absolute; top: 0; z-index: 1;
+  width: 4px; height: 14px;
+  background: var(--teal); border-radius: 2px 2px 0 0;
+}
+.bc-horn-l { left: 18px; transform: rotate(-18deg); }
+.bc-horn-r { right: 18px; transform: rotate(18deg); }
+.bc-horn::after {
+  content: ''; position: absolute; top: -3px; left: -2px;
+  width: 8px; height: 8px; border-radius: 50%;
+  background: var(--teal-light);
+}
+
+/* Arms */
+.bc-arm {
+  position: absolute; top: 42%; z-index: 1;
+  width: 14px; height: 4px;
+  background: var(--teal); border-radius: 2px;
+  transform-origin: center;
+}
+.bc-arm-l { left: -6px; animation: armSwingL 1.6s ease-in-out infinite; }
+.bc-arm-r { right: -6px; animation: armSwingR 1.6s ease-in-out infinite; }
+@keyframes armSwingL {
+  0%,100% { transform: rotate(-15deg); }
+  50%     { transform: rotate(15deg); }
+}
+@keyframes armSwingR {
+  0%,100% { transform: rotate(15deg); }
+  50%     { transform: rotate(-15deg); }
+}
+.bc-claw {
+  position: absolute; top: -3px;
+  width: 6px; height: 10px;
+  border-radius: 0 0 3px 3px;
+}
+.bc-arm-l .bc-claw { left: -4px; border-left: 2px solid var(--teal-light); border-bottom: 2px solid var(--teal-light); }
+.bc-arm-r .bc-claw { right: -4px; border-right: 2px solid var(--teal-light); border-bottom: 2px solid var(--teal-light); }
+
+/* Legs */
+.bc-char-leg {
+  position: absolute; z-index: 1;
+  width: 4px; height: 16px;
+  background: var(--teal); border-radius: 0 0 2px 2px;
+}
+.bc-cl-l1 { bottom: -4px; left: 14px; transform-origin: top center; animation: clegWalk .4s ease-in-out infinite alternate; }
+.bc-cl-r1 { bottom: -4px; right: 14px; transform-origin: top center; animation: clegWalk .4s ease-in-out infinite alternate-reverse; }
+.bc-cl-l2 { bottom: -2px; left: 22px; transform-origin: top center; animation: clegWalk .4s ease-in-out infinite alternate-reverse; }
+.bc-cl-r2 { bottom: -2px; right: 22px; transform-origin: top center; animation: clegWalk .4s ease-in-out infinite alternate; }
+@keyframes clegWalk {
+  0%   { transform: rotate(-20deg); }
+  100% { transform: rotate(20deg); }
+}
+.bc-char-leg::after {
+  content: ''; position: absolute; bottom: -2px; left: -1px;
+  width: 6px; height: 3px; border-radius: 50%;
+  background: var(--teal-light);
 }
 .bc-char-net {
   position: absolute; top: -4px; right: -12px;
