@@ -372,6 +372,13 @@ ul { list-style: none; }
   font-size: 2.1rem; font-weight: 800; color: var(--teal-light);
   letter-spacing: -.03em; line-height: 1;
 }
+.hm-link {
+  text-decoration: none; cursor: pointer;
+  border-bottom: 2px dashed var(--teal-border);
+  transition: border-color .2s, color .2s;
+}
+.hm-link:hover { color: var(--teal); border-bottom-color: var(--teal); }
+.hm-text { font-size: 1.35rem; letter-spacing: -.01em; }
 .hm-label { font-size: .72rem; color: var(--txt3); margin-top: 3px; letter-spacing: .04em; }
 .hm-sep { width: 1px; height: 36px; background: var(--border); flex-shrink: 0; }
 
