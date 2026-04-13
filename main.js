@@ -1261,7 +1261,6 @@ Best,
     '#f87171','#fb923c','#facc15','#a78bfa','#818cf8',
     '#f472b6','#34d399','#38bdf8','#c084fc','#e879f9',
   ];
-  const BUG_SHAPES = ['round','square','horned','blob','spiky'];
   const BUG_NAMES = [
     'NullPointerException', 'IndexOutOfBounds', 'Race Condition',
     'Off-By-One Error', 'Memory Leak', 'Infinite Loop',
@@ -1352,48 +1351,26 @@ Best,
     const bug = document.createElement('div');
     bug.className = 'bc-bug';
 
-    // build a random CSS monster
     const color = BUG_COLORS[Math.floor(Math.random() * BUG_COLORS.length)];
-    const shape = BUG_SHAPES[Math.floor(Math.random() * BUG_SHAPES.length)];
-    const eyeCount = Math.random() > 0.3 ? 2 : (Math.random() > 0.5 ? 3 : 1);
-    const legPairs = 2 + Math.floor(Math.random() * 2); // 2 or 3 pairs
-
-    let radius = '50%';
-    if (shape === 'square') radius = '6px';
-    else if (shape === 'horned') radius = '50% 50% 20% 20%';
-    else if (shape === 'blob') radius = '60% 40% 50% 50%';
-    else if (shape === 'spiky') radius = '30% 70% 40% 60%';
-
-    let eyesHTML = '';
-    for (let e = 0; e < eyeCount; e++) {
-      const leftPos = eyeCount === 1 ? '50%' : eyeCount === 2 ? (e === 0 ? '28%' : '72%') : (e === 0 ? '20%' : e === 1 ? '50%' : '80%');
-      eyesHTML += `<span class="bc-eye" style="left:${leftPos}"><span class="bc-pupil"></span></span>`;
-    }
-
-    let legsHTML = '';
-    for (let l = 0; l < legPairs; l++) {
-      const topPct = 55 + l * (40 / legPairs);
-      legsHTML += `<span class="bc-leg bc-leg-l" style="top:${topPct}%"></span>`;
-      legsHTML += `<span class="bc-leg bc-leg-r" style="top:${topPct}%"></span>`;
-    }
-
-    const hasTeeth = Math.random() > 0.5;
-    const mouthHTML = hasTeeth
-      ? '<span class="bc-mouth bc-teeth">⏟</span>'
-      : '<span class="bc-mouth"></span>';
-
-    const hasAntenna = shape === 'horned' || Math.random() > 0.6;
-    const antennaHTML = hasAntenna
-      ? '<span class="bc-antenna bc-ant-l"></span><span class="bc-antenna bc-ant-r"></span>'
-      : '';
+    const name  = BUG_NAMES[Math.floor(Math.random() * BUG_NAMES.length)];
 
     bug.innerHTML = `
-      <span class="bc-body" style="background:${color};border-radius:${radius};box-shadow:0 0 8px ${color}55">
-        ${antennaHTML}
-        <span class="bc-eyes">${eyesHTML}</span>
-        ${mouthHTML}
+      <span class="bc-tag" style="color:${color}">${name}</span>
+      <span class="bc-antenna bc-ant-l" style="border-color:${color}"></span>
+      <span class="bc-antenna bc-ant-r" style="border-color:${color}"></span>
+      <span class="bc-body" style="background:${color};box-shadow:0 0 10px ${color}66">
+        <span class="bc-shell" style="border-color:${color}"></span>
+        <span class="bc-eyes">
+          <span class="bc-eye"><span class="bc-pupil"></span></span>
+          <span class="bc-eye"><span class="bc-pupil"></span></span>
+        </span>
       </span>
-      ${legsHTML}
+      <span class="bc-leg bc-leg-l" style="top:35%;background:${color}"></span>
+      <span class="bc-leg bc-leg-r" style="top:35%;background:${color}"></span>
+      <span class="bc-leg bc-leg-l" style="top:52%;background:${color}"></span>
+      <span class="bc-leg bc-leg-r" style="top:52%;background:${color}"></span>
+      <span class="bc-leg bc-leg-l" style="top:69%;background:${color}"></span>
+      <span class="bc-leg bc-leg-r" style="top:69%;background:${color}"></span>
     `;
 
     // spawn INSIDE the viewport with margin
@@ -1406,7 +1383,7 @@ Best,
       vx: rand(-BUG_SPEED, BUG_SPEED),
       vy: rand(-BUG_SPEED, BUG_SPEED),
       wobble: rand(0, Math.PI * 2),
-      name: BUG_NAMES[Math.floor(Math.random() * BUG_NAMES.length)],
+      name: name,
     };
 
     bug.style.transform = `translate(${x}px, ${y}px)`;

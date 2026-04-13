@@ -1625,87 +1625,107 @@ kbd {
   50%     { transform: translateY(-4px); }
 }
 
-/* Bugs — CSS monsters */
+/* Bugs — beetle creatures with name tags */
 .bc-bug {
   position: absolute; top: 0; left: 0; will-change: transform;
-  width: 32px; height: 32px;
+  width: 40px; height: 48px;
   transition: none;
 }
-.bc-body {
-  display: block; width: 100%; height: 100%;
-  position: relative;
-  animation: bugWiggle 1.2s ease-in-out infinite;
-}
 
-/* Eyes */
-.bc-eyes {
-  position: absolute; top: 22%; left: 0; right: 0; height: 40%;
-  display: flex; justify-content: center;
-}
-.bc-eye {
-  position: absolute; top: 0;
-  width: 8px; height: 8px; border-radius: 50%;
-  background: #fff;
+/* Error name tag above the bug */
+.bc-tag {
+  position: absolute; top: -18px; left: 50%;
   transform: translateX(-50%);
-}
-.bc-pupil {
-  position: absolute; width: 4px; height: 4px;
-  background: #111; border-radius: 50%;
-  top: 2px; left: 2px;
-  animation: pupilLook 2.5s ease-in-out infinite;
-}
-@keyframes pupilLook {
-  0%,100% { transform: translate(0, 0); }
-  25%     { transform: translate(2px, 0); }
-  50%     { transform: translate(0, 1px); }
-  75%     { transform: translate(-2px, 0); }
-}
-
-/* Mouth */
-.bc-mouth {
-  position: absolute; bottom: 15%; left: 50%;
-  transform: translateX(-50%);
-  width: 10px; height: 4px;
-  background: rgba(0,0,0,.5); border-radius: 0 0 5px 5px;
-  font-size: 0;
-}
-.bc-teeth {
-  background: none; height: auto; width: auto;
-  font-size: .55rem; color: #fff; line-height: 1;
-}
-
-/* Legs */
-.bc-leg {
-  position: absolute; width: 6px; height: 2px;
-  background: currentColor; border-radius: 1px;
-  animation: legWalk .4s ease-in-out infinite alternate;
-}
-.bc-leg-l { left: -7px; transform-origin: right center; }
-.bc-leg-r { right: -7px; transform-origin: left center; }
-.bc-leg-l { animation-delay: 0s; }
-.bc-leg-r { animation-delay: .2s; }
-@keyframes legWalk {
-  0%   { transform: rotate(-25deg); }
-  100% { transform: rotate(25deg); }
+  font-family: 'JetBrains Mono', monospace;
+  font-size: .55rem; font-weight: 700; line-height: 1;
+  white-space: nowrap;
+  background: rgba(0,0,0,.7); padding: 2px 6px; border-radius: 4px;
+  border: 1px solid; opacity: .85;
+  pointer-events: none;
 }
 
 /* Antenna */
 .bc-antenna {
-  position: absolute; top: -6px;
-  width: 2px; height: 8px; background: currentColor;
-  border-radius: 1px;
+  position: absolute; top: 2px; z-index: 1;
+  width: 0; height: 16px;
+  border-left: 2px solid;
 }
-.bc-ant-l { left: 25%; transform: rotate(-20deg); }
-.bc-ant-r { right: 25%; transform: rotate(20deg); }
+.bc-ant-l { left: 10px; transform: rotate(-30deg); transform-origin: bottom center; animation: antBob 1s ease-in-out infinite; }
+.bc-ant-r { right: 10px; transform: rotate(30deg); transform-origin: bottom center; animation: antBob 1s ease-in-out infinite .5s; }
+@keyframes antBob {
+  0%,100% { transform: rotate(-30deg); }
+  50%     { transform: rotate(-20deg); }
+}
 .bc-ant-l::after, .bc-ant-r::after {
-  content: ''; position: absolute; top: -3px; left: -1.5px;
-  width: 5px; height: 5px; border-radius: 50%;
-  background: currentColor; opacity: .7;
+  content: ''; position: absolute; top: -4px; left: -3px;
+  width: 6px; height: 6px; border-radius: 50%;
+  background: currentColor;
+}
+
+/* Body — oval beetle shape */
+.bc-body {
+  display: block; position: absolute;
+  top: 14px; left: 4px; right: 4px; bottom: 2px;
+  border-radius: 50% 50% 45% 45%;
+  animation: bugWiggle 1.5s ease-in-out infinite;
+}
+
+/* Shell line down the middle */
+.bc-shell {
+  position: absolute; top: 30%; left: 50%;
+  width: 0; height: 55%;
+  border-left: 1.5px dashed rgba(0,0,0,.3);
+}
+
+/* Eyes — white with black pupil */
+.bc-eyes {
+  position: absolute; top: 5px; left: 0; right: 0;
+  display: flex; justify-content: center; gap: 6px;
+}
+.bc-eye {
+  width: 10px; height: 10px; border-radius: 50%;
+  background: #fff; position: relative;
+  box-shadow: 0 0 3px rgba(0,0,0,.3);
+}
+.bc-pupil {
+  position: absolute; width: 5px; height: 5px;
+  background: #111; border-radius: 50%;
+  top: 3px; left: 3px;
+  animation: pupilLook 2s ease-in-out infinite;
+}
+@keyframes pupilLook {
+  0%,100% { transform: translate(0, 0); }
+  25%     { transform: translate(2px, -1px); }
+  50%     { transform: translate(-1px, 1px); }
+  75%     { transform: translate(-2px, -1px); }
+}
+
+/* 6 Legs — 3 pairs */
+.bc-leg {
+  position: absolute;
+  width: 10px; height: 3px;
+  border-radius: 2px;
+  animation: legWalk .35s ease-in-out infinite alternate;
+}
+.bc-leg-l { left: -6px; transform-origin: right center; }
+.bc-leg-r { right: -6px; transform-origin: left center; }
+.bc-leg-l { animation-delay: 0s; }
+.bc-leg-r { animation-delay: .18s; }
+.bc-leg::after {
+  content: ''; position: absolute; top: -1px;
+  width: 4px; height: 5px; border-radius: 0 0 2px 2px;
+}
+.bc-leg-l::after { left: -3px; border-left: 2px solid; border-bottom: 2px solid; border-color: inherit; }
+.bc-leg-r::after { right: -3px; border-right: 2px solid; border-bottom: 2px solid; border-color: inherit; }
+@keyframes legWalk {
+  0%   { transform: rotate(-20deg); }
+  100% { transform: rotate(20deg); }
 }
 
 @keyframes bugWiggle {
-  0%,100% { transform: scale(1); }
-  50%     { transform: scale(1.06) rotate(2deg); }
+  0%,100% { transform: scale(1) rotate(0); }
+  30%     { transform: scale(1.03) rotate(1.5deg); }
+  70%     { transform: scale(1.03) rotate(-1.5deg); }
 }
 
 /* Catch effects */
