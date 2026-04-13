@@ -1288,13 +1288,13 @@ Best,
   /* ── DOM: container ── */
   const container = document.createElement('div');
   container.id = 'bugCatcherLayer';
-  container.style.cssText = 'position:fixed;inset:0;pointer-events:none;z-index:5;overflow:hidden;';
+  container.style.cssText = 'position:fixed;inset:0;pointer-events:none;z-index:95;overflow:hidden;';
   document.body.appendChild(container);
 
   /* ── DOM: character ── */
   const charEl = document.createElement('div');
   charEl.className = 'bc-char';
-  charEl.innerHTML = '<span class="bc-char-text">FB</span><span class="bc-char-net">🪤</span>';
+  charEl.innerHTML = '<img src="welcome.jpg" alt="" class="bc-char-img"/><span class="bc-char-net">🪤</span>';
   container.appendChild(charEl);
   updateCharPos();
 
