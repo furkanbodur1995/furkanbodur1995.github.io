@@ -100,11 +100,11 @@ scrollTopBtn && scrollTopBtn.addEventListener('click', () => {
    4. TYPING ANIMATION
 ──────────────────────────────────────── */
 const phrases = [
-  'AI-First Test Engineer',
-  'Senior QA Expert',
-  'LLM Pipeline Architect',
-  'ISTQB × 3 Certified',
-  'UAV Pilot · Systems Tester'
+  'AI & Software Engineer',
+  'Multi-Agent Systems Architect',
+  'RAG Pipeline Engineer',
+  'MCP Server Developer',
+  'ISTQB × 3 Certified'
 ];
 let pIdx = 0, cIdx = 0, deleting = false;
 const typeEl = document.getElementById('typeText');
@@ -1186,12 +1186,12 @@ Best,
   if (window.matchMedia('(hover: none)').matches) return;
 
   const SKILLS = [
-    { label: 'AI & LLM',    val: 95, tags: ['MCP','RAG','pgvector','LLM APIs'] },
-    { label: 'QA Strategy', val: 90, tags: ['ISTQB×3','Risk-based','Exploratory'] },
-    { label: 'Automation',  val: 88, tags: ['Playwright','Selenium','pytest','BDD'] },
-    { label: 'CI/CD',       val: 72, tags: ['Jenkins','GitLab','Docker','SQL'] },
-    { label: 'Security',    val: 68, tags: ['Postman','SoapUI','RBAC','API sec'] },
-    { label: 'Domain',      val: 82, tags: ['UAV Systems','Aerospace QA','ERP'] },
+    { label: 'AI / GenAI',  val: 95, tags: ['Multi-Agent','RAG','MCP','pgvector'] },
+    { label: 'QA Strategy', val: 90, tags: ['ISTQB×3','Risk-based','Safety-Critical'] },
+    { label: 'Automation',  val: 88, tags: ['Python','Playwright','pytest','BDD'] },
+    { label: 'Cloud/Infra', val: 75, tags: ['Kubernetes','Envoy','Docker','AWS'] },
+    { label: 'Core Dev',    val: 82, tags: ['Node.js','TypeScript','PostgreSQL','APIs'] },
+    { label: 'Domain',      val: 85, tags: ['Aerospace QA','ERP','Enterprise SW'] },
   ];
 
   const tip = document.createElement('div');
